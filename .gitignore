@@ -30,3 +30,6 @@ ENV/
 __pycache__/
 .pytest_cache/
 cached/
+
+# macOS specific files
+.DS_Store
