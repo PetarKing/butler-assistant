@@ -18,52 +18,55 @@ The script will:
 import os
 import shutil
 import sys
-from services.embeddings import EmbeddingService
+
 from config.settings import CHROMA_DB_PATH
+from services.embeddings import EmbeddingService
 
 
 def confirm_database_deletion() -> bool:
     """
     Prompt user for confirmation to delete existing database.
-    
+
     Returns:
         True if user confirms deletion, False otherwise
-        
+
     Raises:
         SystemExit: If running in non-interactive environment
     """
     try:
         response = input("   Do you want to delete it and re-index? (y/N): ")
-        return response.lower() == 'y'
+        return response.lower() == "y"
     except (NameError, EOFError):
-        print("Non-interactive environment detected. "
-              "Please manually delete the ChromaDB folder if you wish to re-index.")
+        print(
+            "Non-interactive environment detected. "
+            "Please manually delete the ChromaDB folder if you wish to re-index."
+        )
         sys.exit(1)
 
 
 def cleanup_existing_database() -> None:
     """
     Remove existing ChromaDB database after user confirmation.
-    
+
     Raises:
         SystemExit: If deletion fails or user cancels
     """
     if not os.path.exists(CHROMA_DB_PATH):
         return
-        
+
     print(f"⚠️ Found existing database at '{CHROMA_DB_PATH}'.")
-    
+
     if not confirm_database_deletion():
         print("-> Indexing cancelled by user.")
         sys.exit(0)
-    
+
     print("-> Deleting old database...")
     try:
         shutil.rmtree(CHROMA_DB_PATH)
         print("-> Old database deleted.")
     except OSError as e:
-        print(f"\n--- ERROR: Could not delete the database directory ---")
-        print(f"Please check file permissions or close any programs using this folder.")
+        print("\n--- ERROR: Could not delete the database directory ---")
+        print("Please check file permissions or close any programs using this folder.")
         print(f"System Error: {e}")
         sys.exit(1)
 
@@ -71,7 +74,7 @@ def cleanup_existing_database() -> None:
 def build_index() -> None:
     """
     Initialize embedding service and build the vault index.
-    
+
     Raises:
         SystemExit: If indexing fails
     """
@@ -81,7 +84,7 @@ def build_index() -> None:
         service.index_vault()
         print("-> Indexing completed successfully!")
     except Exception as e:
-        print(f"\n--- FATAL ERROR DURING INDEXING ---")
+        print("\n--- FATAL ERROR DURING INDEXING ---")
         print(f"Error: {e}")
         sys.exit(1)
 
@@ -89,12 +92,12 @@ def build_index() -> None:
 def main() -> None:
     """
     Main function to handle the complete indexing process.
-    
+
     Orchestrates database cleanup and index building with proper
     error handling and user feedback.
     """
     print("--- Obsidian Vault Indexer ---")
-    
+
     cleanup_existing_database()
     build_index()
 

@@ -11,6 +11,7 @@ This module loads environment variables and defines constants for:
 
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -44,7 +45,8 @@ DEBUG_AUDIO = os.getenv("DEBUG_AUDIO", "false").lower() in ("1", "true", "yes")
 # Community tools configuration
 _tools_env_string = os.getenv("COMMUNITY_TOOLS_TO_LOAD")
 if _tools_env_string:
-    COMMUNITY_TOOLS_TO_LOAD = [tool.strip() for tool in _tools_env_string.split(',')]
+    COMMUNITY_TOOLS_TO_LOAD = [tool.strip()
+                               for tool in _tools_env_string.split(",")]
 else:
     COMMUNITY_TOOLS_TO_LOAD = []
 
@@ -60,7 +62,11 @@ TOOL_CONFIG_OVERRIDES = {
 }
 
 # Obsidian vault integration settings
-INCLUDE_OBSIDIAN_TOOLS = os.getenv("INCLUDE_OBSIDIAN_TOOLS", "true").lower() in ("1", "true", "yes")
+INCLUDE_OBSIDIAN_TOOLS = os.getenv("INCLUDE_OBSIDIAN_TOOLS", "true").lower() in (
+    "1",
+    "true",
+    "yes",
+)
 VAULT_ROOT = Path(os.getenv("OBSIDIAN_VAULT_PATH")).expanduser().resolve()
 AGENT_FOLDER_NAME = os.getenv("AGENT_FOLDER_NAME", "Butler")
 ASSISTANT_NAME = os.getenv("ASSISTANT_NAME", "Sebastian")
@@ -88,15 +94,17 @@ STT_MODEL = os.getenv("OPENAI_STT_MODEL", "gpt-4o-mini-transcribe")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Semantic search and RAG settings
-ENABLE_SEMANTIC_SEARCH = os.getenv("ENABLE_SEMANTIC_SEARCH", "false").lower() == "true"
+ENABLE_SEMANTIC_SEARCH = os.getenv(
+    "ENABLE_SEMANTIC_SEARCH", "false").lower() == "true"
 CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "cached/obsidian_chroma_db")
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "thenlper/gte-large")
 SEMANTIC_SEARCH_K_VALUE = int(os.getenv("SEMANTIC_SEARCH_K_VALUE", 5))
 
+
 def print_obsidian_paths() -> None:
     """
     Print diagnostic information about Obsidian-related file paths.
-    
+
     Useful for debugging configuration issues and verifying that
     the vault and sandbox directories are correctly set up.
     """
