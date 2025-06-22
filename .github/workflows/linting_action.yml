@@ -1,16 +1,30 @@
 name: Lint and Commit with Ruff
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   lint:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v2
-    - uses: chartboost/ruff-action@v1
-      with:
-        args: --check .
-        fix_args: --fix .
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: 'style fixes by ruff'
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # 1) Fix issues in-place
+      - name: Ruff auto-fix
+        uses: chartboost/ruff-action@v1
+        with:
+          args: --fix .
+
+      # 2) Commit any fixes
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'style fixes by ruff'
+
+      # 3) Lint to enforce no remaining errors
+      - name: Ruff check
+        uses: chartboost/ruff-action@v1
+        with:
+          args: --check .
