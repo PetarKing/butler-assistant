@@ -284,9 +284,9 @@ def get_rag_tools(rag_service):
 # ==========================================================================
 
 
-def load_community_tools():
+def compute_community_tools():
     """
-    Load community tools based on configuration.
+    Create community tool definitions based on configuration.
 
     Returns:
         Tuple of (implementations_dict, schemas_list)

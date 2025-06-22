@@ -373,7 +373,8 @@ graph TD
 │   ├── embeddings.py    # RAG service
 │   └── tts_service.py
 ├── tools/               # Tool implementations
-│   ├── base.py
+│   ├── registry.py      # Mapping various functions as tools for the LLM to use
+│   ├── loader.py        # Tool loading and initialization logic
 │   ├── chat_tools.py
 │   ├── system_tools.py
 │   └── web_tools.py
