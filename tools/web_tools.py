@@ -7,7 +7,6 @@ import requests
 from langchain_community.tools import DuckDuckGoSearchResults
 from langchain_community.document_loaders import AsyncHtmlLoader
 
-from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import MarkdownifyTransformer
 
 

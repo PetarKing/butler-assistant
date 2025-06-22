@@ -22,7 +22,7 @@ from .chat_tools import (enable_high_brain_power, enable_private_mode,
 from .semantic_search import (build_filtered_semantic_search,
                               build_semantic_search)
 from .system_tools import clipboard_content, screen_capture
-from .web_tools import calculator, fetch_page, web_search, fetch_page_langchain
+from .web_tools import calculator, fetch_page, web_search
 
 # ==========================================================================
 # CORE TOOLS - Always available across all configurations
@@ -362,18 +362,18 @@ async def compute_mcp_tools():
             mcp_implementations[tool.name] = create_async_wrapper(tool)
             mcp_schemas.append(convert_to_openai_function(tool))
             
-    except ExceptionGroup as e:
-        print("🔥 An MCP server connection failed. Here are the details:")
-        for i, error in enumerate(e.exceptions):
-            print(f"\n--- Sub-exception #{i+1} ---")
-            print(f"Error Type: {type(error).__name__}")
-            print(f"Error Details: {error}")
-            # This line will now work correctly
-            traceback.print_exc()
-        print("--------------------------")
-        return {}, []
-    # --- END NEW DEBUG BLOCK ---
     except Exception as e:
-        print(f"⚠️ An unexpected error occurred while loading MCP tools: {e}")
+    # Check if it's the specific group error we were looking for
+        if "ExceptionGroup" in type(e).__name__:
+            print("🔥 An MCP server connection failed. Here are the details:")
+            # The 'e.exceptions' attribute is specific to ExceptionGroup
+            for i, error in enumerate(e.exceptions):
+                print(f"\n--- Sub-exception #{i+1} ---")
+                print(f"Error Type: {type(error).__name__}")
+                print(f"Error Details: {error}")
+                traceback.print_exc()
+        else:
+            # Handle any other potential exceptions
+            print(f"⚠️ An unexpected error occurred while loading MCP tools: {e}")
 
     return mcp_implementations, mcp_schemas
