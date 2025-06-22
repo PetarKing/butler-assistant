@@ -10,16 +10,16 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 - **Powerful Tool Integration**
   - **Core Tools**: Web Search (DuckDuckGo), Web Page Summaries, Calculator, Screen Capture Analysis, and Clipboard Access.
   - **Advanced Obsidian Integration:**
-    - **✅ Semantic Search (RAG):** Ask questions about your notes and get context-aware answers. Sebastian finds conceptually related information, even without exact keywords.
+    - ** Semantic Search (RAG):** Ask questions about your notes and get context-aware answers. Sebastian finds conceptually related information, even without exact keywords.
     - **Note Creation:** Append thoughts and summaries to notes in a sandboxed folder.
     - **Direct Note Reading:** Read the full content of any specific note.
     - **Fallback Search:** If semantic search is disabled, the agent can still list all files to find information.
   - **Chat Commands:** Dynamically switch to a high-power model, enter private mode to disable logging, reset the conversation, or quit.
   - **Dynamic Community Tools:** Easily extend Sebastian's capabilities by loading tools from the `langchain-community` library (e.g., Arxiv, Wikipedia) via a simple configuration.
 - **Memory & Persistence**
-  - Core Memory: A dedicated "golden note" provides the agent with persistent, foundational knowledge about your preferences, key facts, and standing instructions.
-  - Session summaries are automatically stored as notes in your Obsidian vault.
-  - A searchable vector database of your entire Obsidian vault acts as the agent's long-term memory for the RAG system.  
+  - **Core Memory:** A dedicated "golden note" provides the agent with persistent, foundational knowledge about your preferences, key facts, and standing instructions.
+  - **Session summaries** are automatically stored as notes in your Obsidian vault.
+  - **A searchable vector database** of your entire Obsidian vault acts as the agent's long-term memory for the RAG system.  
 
 ## 🛠 Installation
 
@@ -338,10 +338,11 @@ graph TD
 
 ## 🛠️ Future Improvements & Ideas
 
-- Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
-- Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
-- Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
-- Multiple Agents: Supporting different personalities and purposes.
+- ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
+- 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
+- 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
+- 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
+- 🧑‍🧒‍🧒 Multiple Agents: Supporting different personalities and purposes.
 
 ## 🚧 AI Assistance Disclaimer
 
@@ -353,4 +354,4 @@ Please note that, as with all software, users should verify that any items criti
 
 ## 📜 License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License.
