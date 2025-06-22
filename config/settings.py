@@ -63,7 +63,6 @@ TOOL_CONFIG_OVERRIDES = {
         "function_description": "Fallback search engine using Brave Search. Use this in case of Rate Limit errors with the primary search engine.",
     }
 }
-print(TOOL_CONFIG_OVERRIDES)
 
 # Obsidian vault integration settings
 INCLUDE_OBSIDIAN_TOOLS = os.getenv("INCLUDE_OBSIDIAN_TOOLS", "true").lower() in (
@@ -74,6 +73,7 @@ INCLUDE_OBSIDIAN_TOOLS = os.getenv("INCLUDE_OBSIDIAN_TOOLS", "true").lower() in 
 VAULT_ROOT = Path(os.getenv("OBSIDIAN_VAULT_PATH")).expanduser().resolve()
 AGENT_FOLDER_NAME = os.getenv("AGENT_FOLDER_NAME", "Butler")
 ASSISTANT_NAME = os.getenv("ASSISTANT_NAME", "Sebastian")
+USER_NAME = os.getenv("USER_NAME", "User")
 
 # Agent workspace paths
 SANDBOX_ROOT = (VAULT_ROOT / AGENT_FOLDER_NAME).resolve()

@@ -32,7 +32,7 @@ def initialize_app_tools():
     Initialize application tools based on configuration settings and return
     a tuple of (tool_implementations, tool_schemas).
     """
-    print("\n--- 🛠️  Assembling Final Toolset ---")
+    print("\n--- 🛠️  Tools made Available ---")
 
     # 1. Start with core tools
     final_implementations = dict(CORE_TOOL_IMPLEMENTATIONS)
@@ -46,19 +46,16 @@ def initialize_app_tools():
 
     # 3. Conditionally add Obsidian-related tools
     if INCLUDE_OBSIDIAN_TOOLS:
-        print("-> Obsidian tools enabled.")
         final_implementations.update(OBSIDIAN_TOOL_IMPLEMENTATIONS)
         final_schemas.extend(OBSIDIAN_TOOL_SCHEMAS)
 
         if USE_CORE_MEMORY:
-            print("-> Core memory enabled. Adding update tool.")
             # Make sure to import these new variables from tools/base.py
             final_implementations.update(CORE_MEMORY_TOOL_IMPLEMENTATION)
             final_schemas.append(CORE_MEMORY_TOOL_SCHEMA)
 
         # 3a. Add RAG tools OR the fallback tools
         if ENABLE_SEMANTIC_SEARCH:
-            print("-> Semantic search (RAG) enabled.")
             try:
                 global rag_service
                 rag_service = EmbeddingService()

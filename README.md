@@ -32,6 +32,18 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 - 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
 - 🧑‍🧒‍🧒 Multiple Agents: Supporting different personalities and purposes.
 
+## 🖼️ Showcase
+
+<details>
+  <summary>Sebastian in Action</summary>
+  <p align="center">
+    <img src="showcase_assets/terminal.png" alt="Terminal showcasing the conversation." width="450">
+    <img src="showcase_assets/tools_log.png" alt="Log file showing tools use." width="450">
+    <img src="showcase_assets/created_note.png" alt="Obsidian note created by the agent." width="450">
+    <img src="showcase_assets/session_summary.png" alt="Auto-generated session summary note." width="450">
+  </p>
+</details>
+
 ## 🛠 Installation
 
 1. **Clone the repo**  
@@ -87,6 +99,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 | `OBSIDIAN_PATH`          | Absolute path to your Obsidian vault                               | —                                     |
 | `AGENT_FOLDER_NAME`      | Relative sandbox folder inside vault                               | `Butler`                              |
 | `ASSISTANT_NAME`         | Name of the assistant, used in prompts.                            | `Sebatian`                            |
+| `USER_NAME`              | Name of the user (you), used in prompts.                           | `User`                                |
 | `SESSION_SUMMARY_PREFIX` | Prefix for session summary filenames                               | `session-summary-`                    |
 | `TOOL_CALL_FILE_NAME`    | Filename for combined tool-call log under logs subfolder           | `tool-calls.md`                       |
 | `INCLUDE_OBSIDIAN_TOOLS` | Toggle to include Obsidian-based tools in the assistant            | `true`                                |

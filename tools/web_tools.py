@@ -34,7 +34,7 @@ def web_search(query: str) -> str:
                 time.sleep(3)
                 continue
             else:
-                return f"[search-error] {e}"
+                return f"[search-error] {error_msg}"
 
 _safe = re.compile(r"^[0-9+\-*/(). ]+$")
 
@@ -104,7 +104,10 @@ def fetch_page(url: str) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": "Summarise the page in a few bullet points, factual, no opinion.",
+                    "content": (
+                        "Summarise the page in a few bullet points, factual, no opinion."
+                        "Format in clean markdown, and prioritise key information."
+                    )
                 },
                 {"role": "user", "content": f"TITLE: {title}\n\nCONTENT:\n{chunk}"},
             ],

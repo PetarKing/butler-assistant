@@ -64,8 +64,6 @@ class ButlerAgent:
         """Load core memory from the designated file if enabled."""
         if not USE_CORE_MEMORY:
             return
-
-        print("-> Core memory enabled. Attempting to load...")
         try:
             core_memory_content = read_note(
                 f"{AGENT_FOLDER_NAME}/{CORE_MEMORY_FILENAME}"
@@ -87,7 +85,8 @@ class ButlerAgent:
     def _load_recent_memories(self):
         """Load recent session summaries to provide context."""
         try:
-            memories = recent_session_summaries(3)
+            _memories_to_load = 3
+            memories = recent_session_summaries(_memories_to_load)
             if memories.strip():
                 self.history.append(
                     {
@@ -95,6 +94,7 @@ class ButlerAgent:
                         "content": f"Here are highlighted notes from recent sessions:\n{memories}",
                     }
                 )
+                print(f"✅ Last {_memories_to_load} chat summaries loaded successfully.")
         except Exception as e:
             print(f"[memory-load-error] {e}")
 
