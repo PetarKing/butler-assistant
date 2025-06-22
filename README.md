@@ -287,7 +287,7 @@ graph TD
             EmbeddingService["🧬 Embedding Service"]
             VectorDB[("🗄️ Vector DB<br>(ChromaDB)")]
         end
-        EmbeddingService -- Creates/Queries --> VectorDB
+        EmbeddingService -- Creates & Queries --> VectorDB
         EmbeddingService -- Reads from --> ObsidianFiles
     end
 
