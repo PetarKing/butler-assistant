@@ -36,12 +36,34 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 
 <details>
   <summary>Sebastian in Action</summary>
-  <p align="center">
-    <img src="showcase_assets/terminal.png" alt="Terminal showcasing the conversation." width="450">
-    <img src="showcase_assets/tools_log.png" alt="Log file showing tools use." width="450">
-    <img src="showcase_assets/created_note.png" alt="Obsidian note created by the agent." width="450">
-    <img src="showcase_assets/session_summary.png" alt="Auto-generated session summary note." width="450">
-  </p>
+  <table border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td align="center" valign="top">
+        <a href="showcase_assets/terminal.png">
+          <img src="showcase_assets/terminal.png" alt="Terminal showcasing the conversation." width="420" style="max-width: 100%; margin: 5px;">
+        </a>
+      </td>
+      <td align="center" valign="top">
+        <a href="showcase_assets/tools_log.png">
+          <img src="showcase_assets/tools_log.png" alt="Log file showing tools use." width="420" style="max-width: 100%; margin: 5px;">
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="top">
+        <a href="showcase_assets/created_note.png">
+          <img src="showcase_assets/created_note.png" alt="Obsidian note created by the agent." width="420" style="max-width: 100%; margin: 5px;">
+        </a>
+      </td>
+      <td align="center" valign="top">
+        <a href="showcase_assets/session_summary.png">
+          <img src="showcase_assets/session_summary.png" alt="Auto-generated session summary note." width="420" style="max-width: 100%; margin: 5px;">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </details>
 
 ## 🛠 Installation
