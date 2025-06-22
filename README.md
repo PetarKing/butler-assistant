@@ -10,7 +10,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 - **Powerful Tool Integration**
   - **Core Tools**: Web Search (DuckDuckGo), Web Page Summaries, Calculator, Screen Capture Analysis, and Clipboard Access.
   - **Advanced Obsidian Integration:**
-    - ** Semantic Search (RAG):** Ask questions about your notes and get context-aware answers. Sebastian finds conceptually related information, even without exact keywords.
+    - **Semantic Search (RAG):** Ask questions about your notes and get context-aware answers. Sebastian finds conceptually related information, even without exact keywords.
     - **Note Creation:** Append thoughts and summaries to notes in a sandboxed folder.
     - **Direct Note Reading:** Read the full content of any specific note.
     - **Fallback Search:** If semantic search is disabled, the agent can still list all files to find information.
