@@ -1,7 +1,7 @@
 aiohttp>=3.8.0
 beautifulsoup4>=4.9.0
 bs4>=0.0.1
-duckduckgo_search>=3.0.0
+duckduckgo_search>=8.0.0
 langchain-community>=0.0.10
 langchain-openai>=0.3.24
 langchain-huggingface>=0.3.0

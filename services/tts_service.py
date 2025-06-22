@@ -13,7 +13,6 @@ from config.settings import OPENAI_API_KEY, TTS_MODEL, TTS_VOICE
 
 openai.api_key = OPENAI_API_KEY
 
-
 async def speak_custom(text: str, stop_chime: asyncio.Event | None = None):
     """
     Convert text to speech and play it with streaming audio.

@@ -1,4 +1,5 @@
 import re
+import time
 
 import bs4
 import openai
@@ -9,10 +10,10 @@ from config.settings import CHEAP_MODEL
 
 ddg = DuckDuckGoSearchResults()
 
-
 def web_search(query: str) -> str:
     """
     Perform a web search using DuckDuckGo.
+    Retries up to 3 times if rate limited, with a 1 second delay between attempts.
 
     Args:
         query: The search query string
@@ -20,12 +21,20 @@ def web_search(query: str) -> str:
     Returns:
         Search results truncated to 1500 characters, or error message
     """
-    try:
-        result = ddg.run(query)[:1500]
-        return result
-    except Exception as e:
-        return f"[search-error] {e}"
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            result = ddg.run(query)
+            return result[:1500]
+        except Exception as e:
+            error_msg = str(e)
 
+            # If rate limited, wait and retry
+            if 'Ratelimit' in error_msg and attempt < max_retries:
+                time.sleep(3)
+                continue
+            else:
+                return f"[search-error] {e}"
 
 _safe = re.compile(r"^[0-9+\-*/(). ]+$")
 

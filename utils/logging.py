@@ -51,16 +51,18 @@ def log_tool_call(name: str, args: dict, result: str | dict) -> None:
         ]
 
         if args:
-            md.append(f"**Args:** `{json.dumps(args, ensure_ascii=False)}`\n")
+            args_str = json.dumps(args, ensure_ascii=False)
+            label = "Args"
+            if len(args_str) > 600:
+                args_str = shorten_text(args_str, 600)
+                label += " (truncated)"
+            md.append(f"**{label}:** `{args_str}`\n")
 
-        snippet = shorten_text(str(result), 600)
-        md.extend(
-            [
-                "**Result (truncated):**\n",
-                f"> {snippet.replace('>', '&gt;')}\n",
-                "\n---\n\n",
-            ]
-        )
+        label = "Result"
+        if len(result) > 600:
+            result = shorten_text(result, 600)
+            label += " (truncated)"
+        md.append(f"**{label}:** `{result}`\n")
 
         with open(TOOL_CALL_LOG_PATH, "a", encoding="utf-8") as lf:
             lf.writelines(md)

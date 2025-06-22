@@ -23,6 +23,8 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 
 ## 🛠️ Future Improvements & Ideas
 
+- 🧹 **Chores:**
+  - Prevent logging tool calls in case of "priave mode".
 - ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
 - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
 - 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.

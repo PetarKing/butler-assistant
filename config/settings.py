@@ -52,14 +52,18 @@ else:
 
 # Tool-specific configuration overrides
 TOOL_CONFIG_OVERRIDES = {
-    # Example: Tool configuration with custom initialization arguments
-    # "GoogleSearchRun": {
-    #     "init_args": {
-    #         "api_key": os.getenv("GOOGLE_API_KEY"),
-    #         "search_engine_id": os.getenv("GOOGLE_CSE_ID")
-    #     }
-    # }
+    # Example: Fallback Search Engine
+    #   -> make sure `COMMUNITY_TOOLS_TO_LOAD` includes "BraveSearch"
+    #   -> set `BRAVE_SEARCH_API_KEY` in your .env file
+    "BraveSearch": {
+        "init_args": {
+            "api_key": os.getenv("BRAVE_SEARCH_API_KEY"),
+        },
+        "function_name": "fallback_web_search",
+        "function_description": "Fallback search engine using Brave Search. Use this in case of Rate Limit errors with the primary search engine.",
+    }
 }
+print(TOOL_CONFIG_OVERRIDES)
 
 # Obsidian vault integration settings
 INCLUDE_OBSIDIAN_TOOLS = os.getenv("INCLUDE_OBSIDIAN_TOOLS", "true").lower() in (
@@ -92,6 +96,7 @@ STT_MODEL = os.getenv("OPENAI_STT_MODEL", "gpt-4o-mini-transcribe")
 
 # API keys
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+BRAVE_SEARCH_API_KEY = os.getenv("BRAVE_SEARCH_API_KEY")
 
 # Semantic search and RAG settings
 ENABLE_SEMANTIC_SEARCH = os.getenv(

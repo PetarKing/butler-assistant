@@ -8,7 +8,7 @@ Tools are organized into categories: core, Obsidian, semantic search, and commun
 from langchain_community import tools as community_tools
 from langchain_core.utils.function_calling import convert_to_openai_function
 
-from config.settings import COMMUNITY_TOOLS_TO_LOAD, SANDBOX_ROOT
+from config.settings import COMMUNITY_TOOLS_TO_LOAD, SANDBOX_ROOT, TOOL_CONFIG_OVERRIDES
 from services.obsidian_service import (append_core_memory, append_note,
                                        list_vault_files, read_entire_memory,
                                        read_note)
@@ -298,9 +298,24 @@ def load_community_tools():
         return implementations, schemas
 
     for tool_name in COMMUNITY_TOOLS_TO_LOAD:
+        # Apply any override configuration for this tool
+        overrides = TOOL_CONFIG_OVERRIDES.get(tool_name, {})
+        init_args = overrides.get("init_args", {})
+        # Optional override for the tool name shown to OpenAI
+        override_name = overrides.get("function_name")
+        override_description = overrides.get("function_description")
         try:
             tool_class = getattr(community_tools, tool_name)
-            tool_instance = tool_class()
+            # Instantiate with overrides if provided
+            if init_args:
+                tool_instance = tool_class(**init_args)
+            else:
+                tool_instance = tool_class()
+            # Apply name override if provided
+            if override_name:
+                tool_instance.name = override_name
+            if override_description:
+                tool_instance.description = override_description
             implementations[tool_instance.name] = tool_instance
             schemas.append(convert_to_openai_function(tool_instance))
         except Exception as e:

@@ -50,7 +50,6 @@ class EmbeddingService:
             model_name=EMBEDDING_MODEL_NAME)
 
         if os.path.exists(self.db_path):
-            print(f"Loading existing ChromaDB index from '{self.db_path}'...")
             try:
                 self.vector_store = Chroma(
                     persist_directory=self.db_path,
