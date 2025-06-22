@@ -98,7 +98,8 @@ class EmbeddingService:
         print("\nStep 1: Loading notes from Obsidian vault...")
 
         # Exclude files that shouldn't be embedded
-        exclude_patterns = [f"**/{TOOL_CALL_FILE_NAME}"]
+        exclude_patterns = [f"**/{TOOL_CALL_FILE_NAME}",
+                            "*/.trash/*"]
         print(f"-> Excluding {len(exclude_patterns)} file patterns.")
 
         loader = ObsidianLoader(self.vault_path)
@@ -132,7 +133,8 @@ class EmbeddingService:
                 # Extract and add tags
                 tags = re.findall(r"#([\w/-]+)", doc.page_content)
                 if tags:
-                    doc.metadata["tags"] = ",".join(tags)
+                    for t in tags:
+                        doc.metadata[f"tag__{t}"] = True
 
                 processed_docs.append(doc)
 
@@ -146,7 +148,7 @@ class EmbeddingService:
         # Split documents into chunks for better embedding
         print("Step 2: Splitting documents into chunks...")
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000, chunk_overlap=200
+            chunk_size=500, chunk_overlap=200
         )
         chunked_docs = text_splitter.split_documents(processed_docs)
         print(f"-> Created {len(chunked_docs)} chunks.")
@@ -203,11 +205,16 @@ class EmbeddingService:
         for doc in results:
             relative_path = doc.metadata.get("relative_path")
             if relative_path and relative_path not in seen_paths:
+                tag_list = [
+                    key[len("tag__"):]
+                    for key, val in doc.metadata.items()
+                    if key.startswith("tag__") and val is True
+                ]
                 formatted_results.append(
                     {
                         "relative_path": relative_path,
                         "content_snippet": doc.page_content,
-                        "tags": doc.metadata.get("tags", "None"),
+                        "tags": ",".join(tag_list) or "None",
                     }
                 )
                 seen_paths.add(relative_path)
@@ -250,7 +257,8 @@ class EmbeddingService:
             return [{"error": "RAG service not initialized."}]
 
         results = self.vector_store.similarity_search(
-            query, k=SEMANTIC_SEARCH_K_VALUE, filter={
-                "tags": {"$like": f"%{tag}%"}}
+            query, k=SEMANTIC_SEARCH_K_VALUE, filter= {
+                f"tag__{tag}": { "$eq": True }
+            }
         )
         return self._format_results(results)

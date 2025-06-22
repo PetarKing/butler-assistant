@@ -20,4 +20,3 @@ tqdm>=4.67.1
 sentence-transformers>=4.1.0
 chromadb>=1.0.13
 langchain-chroma>=0.2.4
-pylint>=3.3.7
