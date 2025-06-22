@@ -5,20 +5,23 @@ Provides streaming audio playback with minimal latency for natural conversation 
 """
 
 import asyncio
+
 import openai
-from config.settings import TTS_MODEL, TTS_VOICE, OPENAI_API_KEY
+
 from config.personality import TTS_INSTRUCTIONS
+from config.settings import OPENAI_API_KEY, TTS_MODEL, TTS_VOICE
 
 openai.api_key = OPENAI_API_KEY
+
 
 async def speak_custom(text: str, stop_chime: asyncio.Event | None = None):
     """
     Convert text to speech and play it with streaming audio.
-    
+
     Uses OpenAI's TTS API to generate high-quality speech audio, then streams
     it directly to the audio output device for minimal latency. Optionally
     signals when audio playback begins.
-    
+
     Args:
         text: Text content to convert to speech
         stop_chime: Optional event to set when audio playback starts
@@ -35,9 +38,10 @@ async def speak_custom(text: str, stop_chime: asyncio.Event | None = None):
             instructions=TTS_INSTRUCTIONS,
         )
 
-        import sounddevice as sd
         import time
-        
+
+        import sounddevice as sd
+
         with sd.RawOutputStream(
             samplerate=SAMPLE_RATE,
             channels=1,

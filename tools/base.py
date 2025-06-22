@@ -5,22 +5,20 @@ This module centralizes all tool definitions, schemas, and loading logic.
 Tools are organized into categories: core, Obsidian, semantic search, and community tools.
 """
 
-from langchain_core.utils.function_calling import convert_to_openai_function
 from langchain_community import tools as community_tools
+from langchain_core.utils.function_calling import convert_to_openai_function
 
-from .chat_tools import quit_chat, reset_chat, enable_high_brain_power, enable_private_mode
-from .web_tools import web_search, fetch_page, calculator
-from .system_tools import screen_capture, clipboard_content
-from .semantic_search import build_semantic_search, build_filtered_semantic_search
-from services.obsidian_service import (
-    append_note, append_core_memory,
-    read_entire_memory,
-    read_note, list_vault_files
-)
-from config.settings import (
-    SANDBOX_ROOT,
-    COMMUNITY_TOOLS_TO_LOAD,
-)
+from config.settings import COMMUNITY_TOOLS_TO_LOAD, SANDBOX_ROOT
+from services.obsidian_service import (append_core_memory, append_note,
+                                       list_vault_files, read_entire_memory,
+                                       read_note)
+
+from .chat_tools import (enable_high_brain_power, enable_private_mode,
+                         quit_chat, reset_chat)
+from .semantic_search import (build_filtered_semantic_search,
+                              build_semantic_search)
+from .system_tools import clipboard_content, screen_capture
+from .web_tools import calculator, fetch_page, web_search
 
 # ==========================================================================
 # CORE TOOLS - Always available across all configurations
@@ -143,7 +141,7 @@ OBSIDIAN_TOOL_SCHEMAS = [
             "parameters": {
                 "type": "object",
                 "properties": {"rel_path": {"type": "string"}},
-                "required": ["rel_path"]
+                "required": ["rel_path"],
             },
         },
     },
@@ -151,14 +149,14 @@ OBSIDIAN_TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "append_note",
-            "description": f"Append markdown content to a note in the sandbox folder \"{SANDBOX_ROOT}\". Path should be relative to sandbox root.",
+            "description": f'Append markdown content to a note in the sandbox folder "{SANDBOX_ROOT}". Path should be relative to sandbox root.',
             "parameters": {
                 "type": "object",
                 "properties": {
                     "rel_path": {"type": "string"},
-                    "content": {"type": "string"}
+                    "content": {"type": "string"},
                 },
-                "required": ["rel_path", "content"]
+                "required": ["rel_path", "content"],
             },
         },
     },
@@ -168,9 +166,7 @@ OBSIDIAN_TOOL_SCHEMAS = [
 # CORE MEMORY TOOL - Persistent assistant memory
 # ==========================================================================
 
-CORE_MEMORY_TOOL_IMPLEMENTATION = {
-    "append_core_memory": append_core_memory
-}
+CORE_MEMORY_TOOL_IMPLEMENTATION = {"append_core_memory": append_core_memory}
 
 CORE_MEMORY_TOOL_SCHEMA = {
     "type": "function",
@@ -186,7 +182,7 @@ CORE_MEMORY_TOOL_SCHEMA = {
             "properties": {
                 "content": {
                     "type": "string",
-                    "description": "The important information to remember."
+                    "description": "The important information to remember.",
                 }
             },
             "required": ["content"],
@@ -226,13 +222,14 @@ OBSIDIAN_FALLBACK_SCHEMAS = [
 # SEMANTIC SEARCH TOOLS - RAG-powered search capabilities
 # ==========================================================================
 
+
 def get_rag_tools(rag_service):
     """
     Get semantic search tool implementations and schemas.
-    
+
     Args:
         rag_service: Initialized embedding service for semantic search
-        
+
     Returns:
         Tuple of (implementations_dict, schemas_list)
     """
@@ -253,10 +250,10 @@ def get_rag_tools(rag_service):
                         "query": {"type": "string"},
                         "use_compression": {
                             "type": "boolean",
-                            "description": "Return more concise results."
-                        }
+                            "description": "Return more concise results.",
+                        },
                     },
-                    "required": ["query"]
+                    "required": ["query"],
                 },
             },
         },
@@ -271,30 +268,32 @@ def get_rag_tools(rag_service):
                         "query": {"type": "string"},
                         "tag": {
                             "type": "string",
-                            "description": "Tag to filter by (without '#' prefix)."
-                        }
+                            "description": "Tag to filter by (without '#' prefix).",
+                        },
                     },
-                    "required": ["query", "tag"]
+                    "required": ["query", "tag"],
                 },
             },
         },
     ]
     return implementations, schemas
 
+
 # ==========================================================================
 # COMMUNITY TOOLS - LangChain community tool integration
 # ==========================================================================
 
+
 def load_community_tools():
     """
     Load community tools based on configuration.
-    
+
     Returns:
         Tuple of (implementations_dict, schemas_list)
     """
     implementations = {}
     schemas = []
-    
+
     if not isinstance(COMMUNITY_TOOLS_TO_LOAD, list) or not COMMUNITY_TOOLS_TO_LOAD:
         return implementations, schemas
 
@@ -307,5 +306,5 @@ def load_community_tools():
         except Exception as e:
             print(f"Failed to load community tool '{tool_name}': {e}")
             raise e
-            
+
     return implementations, schemas
