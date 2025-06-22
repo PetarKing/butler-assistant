@@ -5,7 +5,6 @@ This module centralizes all tool definitions, schemas, and loading logic.
 Tools are organized into categories: core, Obsidian, semantic search, and community tools.
 """
 
-import json
 from langchain_core.utils.function_calling import convert_to_openai_function
 from langchain_community import tools as community_tools
 

@@ -62,8 +62,8 @@ def cleanup_existing_database() -> None:
         shutil.rmtree(CHROMA_DB_PATH)
         print("-> Old database deleted.")
     except OSError as e:
-        print(f"\n--- ERROR: Could not delete the database directory ---")
-        print(f"Please check file permissions or close any programs using this folder.")
+        print("\n--- ERROR: Could not delete the database directory ---")
+        print("Please check file permissions or close any programs using this folder.")
         print(f"System Error: {e}")
         sys.exit(1)
 
@@ -81,7 +81,7 @@ def build_index() -> None:
         service.index_vault()
         print("-> Indexing completed successfully!")
     except Exception as e:
-        print(f"\n--- FATAL ERROR DURING INDEXING ---")
+        print("\n--- FATAL ERROR DURING INDEXING ---")
         print(f"Error: {e}")
         sys.exit(1)
 

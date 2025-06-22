@@ -2,6 +2,14 @@
 Main entrypoint for the ButlerAgent application.
 Initializes the toolset based on configuration and runs the voice chat loop.
 """
+# --- Import tool "building blocks" from the now-simplified base file ---
+from tools.base import (
+    CORE_MEMORY_TOOL_IMPLEMENTATION, CORE_MEMORY_TOOL_SCHEMA, CORE_TOOL_IMPLEMENTATIONS, CORE_TOOL_SCHEMAS,
+    OBSIDIAN_TOOL_IMPLEMENTATIONS, OBSIDIAN_TOOL_SCHEMAS,
+    OBSIDIAN_FALLBACK_IMPLEMENTATIONS, OBSIDIAN_FALLBACK_SCHEMAS,
+    get_rag_tools, load_community_tools
+)
+
 import asyncio
 import time
 import openai
@@ -19,14 +27,6 @@ from services.embeddings import EmbeddingService
 
 # Shared RAG service instance
 rag_service = None
-
-# --- Import tool "building blocks" from the now-simplified base file ---
-from tools.base import (
-    CORE_MEMORY_TOOL_IMPLEMENTATION, CORE_MEMORY_TOOL_SCHEMA, CORE_TOOL_IMPLEMENTATIONS, CORE_TOOL_SCHEMAS,
-    OBSIDIAN_TOOL_IMPLEMENTATIONS, OBSIDIAN_TOOL_SCHEMAS,
-    OBSIDIAN_FALLBACK_IMPLEMENTATIONS, OBSIDIAN_FALLBACK_SCHEMAS,
-    get_rag_tools, load_community_tools
-)
 
 def initialize_app_tools():
     """
@@ -221,11 +221,3 @@ if __name__ == "__main__":
         asyncio.run(voice_chat(tool_implementations, tool_schemas))
     except KeyboardInterrupt:
         print("\n👋 Exiting by Ctrl‑C")
-    finally:
-        # Ensure the last session is summarised even on unexpected exit
-        try:
-            # voice_chat might have exited and recreated agent; use a safe fallback
-            if 'agent' in locals() and not getattr(agent, "private_chat", False):
-                save_session_summary(agent.history)
-        except Exception:
-            pass
