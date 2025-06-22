@@ -2,7 +2,6 @@
 Main entrypoint for the ButlerAgent application.
 Initializes the toolset based on configuration and runs the voice chat loop.
 """
-
 from tools.base import (CORE_MEMORY_TOOL_IMPLEMENTATION,
                         CORE_MEMORY_TOOL_SCHEMA, CORE_TOOL_IMPLEMENTATIONS,
                         CORE_TOOL_SCHEMAS, OBSIDIAN_FALLBACK_IMPLEMENTATIONS,
@@ -27,9 +26,6 @@ from services.tts_service import speak_custom
 
 # Shared RAG service instance
 rag_service = None
-
-# --- Import tool "building blocks" from the now-simplified base file ---
-
 
 def initialize_app_tools():
     """
