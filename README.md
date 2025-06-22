@@ -343,6 +343,14 @@ graph TD
 - Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
 - Multiple Agents: Supporting different personalities and purposes.
 
+## 🚧 AI Assistance Disclaimer
+
+This project—including its codebase, documentation, and the repository logo image—was created with the assistance of various AI tools. All content has been thoroughly reviewed and tested manually to ensure quality and accuracy.
+
+Please note that, as with all software, users should verify that any items critical to their workflows are functioning as intended and safe. The owner of this repository shall not be held responsible for any effects resulting from the usage of this tool, including advice or information provided by the LLM or any actions taken by it.
+
+**Contributors:** When adding new features or making changes, use AI tools responsibly and judiciously to preserve or enhance code quality and maintainability. Avoid "vibe-coding" quick, low-quality solutions that compromise the project's long-term health.
+
 ## 📜 License
 
 MIT License — see [LICENSE](LICENSE) for details.
