@@ -1,0 +1,31 @@
+# Environment variables and secrets
+.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Generated files
+*.wav
+!waiting.wav
+*.log
+*.mp3
+
+# Local cache
+__pycache__/
+.pytest_cache/
+cached/
