@@ -72,7 +72,7 @@ def read_note(rel_path: str) -> str:
     try:
         return p.read_text(encoding="utf-8")
     except FileNotFoundError:
-        return f"[read_note_error] File not found: {rel_path}"
+        return f"[read_note-error] File not found: {rel_path}"
 
 
 def list_vault_files(_: str = "") -> list[str]:

@@ -50,6 +50,12 @@ if _tools_env_string:
 else:
     COMMUNITY_TOOLS_TO_LOAD = []
 
+# Controlling MCP tools usage
+USE_MCP_TOOLS = os.getenv("USE_MCP_TOOLS", "false").lower() in ("1", "true", "yes")
+if USE_MCP_TOOLS:
+    # Manually load dependencies for MCP tools you defined in `mcp_tools.py`
+    PIPEDREAM_TAVILY_URL = os.getenv("PIPEDREAM_TAVILY_URL")
+
 # Tool-specific configuration overrides
 TOOL_CONFIG_OVERRIDES = {
     # Example: Fallback Search Engine

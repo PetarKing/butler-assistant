@@ -6,6 +6,7 @@ processing, tool execution, and memory management for the voice assistant.
 """
 
 import asyncio
+import inspect
 import json
 
 import openai
@@ -69,7 +70,7 @@ class ButlerAgent:
                 f"{AGENT_FOLDER_NAME}/{CORE_MEMORY_FILENAME}"
             )
 
-            if not core_memory_content.startswith("[read_note_error]"):
+            if not core_memory_content.startswith("[read_note-error]"):
                 core_memory_message = {
                     "role": "system",
                     "content": f"--- CORE MEMORY & STANDING INSTRUCTIONS ---\n{core_memory_content}\n--- END CORE MEMORY ---",
@@ -175,7 +176,12 @@ class ButlerAgent:
             result = f"unknown tool: {tname}"
         else:
             try:
-                if isinstance(func_or_tool, BaseTool):
+                is_async = inspect.iscoroutinefunction(func_or_tool)
+                # Check if the function we retrieved is an async function
+                if is_async:
+                    # Await the coroutine function with unpacked keyword arguments
+                    result = await func_or_tool(**targs)
+                elif isinstance(func_or_tool, BaseTool):
                     # Execute LangChain tool
                     result = await asyncio.to_thread(func_or_tool.invoke, targs)
                 else:

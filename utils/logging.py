@@ -62,7 +62,7 @@ def log_tool_call(name: str, args: dict, result: str | dict) -> None:
         if len(result) > 600:
             result = shorten_text(result, 600)
             label += " (truncated)"
-        md.append(f"**{label}:** `{result}`\n")
+        md.append(f"**{label}:** `{result}`\n\n---\n")
 
         with open(TOOL_CALL_LOG_PATH, "a", encoding="utf-8") as lf:
             lf.writelines(md)

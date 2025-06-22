@@ -36,7 +36,7 @@ async def initialize_app():
         embedding_future = loop.run_in_executor(None, rag_service.load)
     
     # Get the tools and create the ButlerAgent
-    tool_implementations, tool_schemas = initialize_app_tools(rag_service)
+    tool_implementations, tool_schemas = await initialize_app_tools(rag_service)
     agent = ButlerAgent(tool_implementations, tool_schemas)
 
     return agent, embedding_future

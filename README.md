@@ -16,6 +16,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
     - **Fallback Search:** If semantic search is disabled, the agent can still list all files to find information.
   - **Chat Commands:** Dynamically switch to a high-power model, enter private mode to disable logging, reset the conversation, or quit.
   - **Dynamic Community Tools:** Easily extend Sebastian's capabilities by loading tools from the `langchain-community` library (e.g., Arxiv, Wikipedia) via a simple configuration.
+  - **Standardized MCP Tool Support:** Connect to a growing ecosystem of external tools (e.g., advanced web search with Tavily, crypto prices, file system access) through the Model Context Protocol (MCP), a new standard for AI agent tooling.
 - **Memory & Persistence**
   - **Core Memory:** A dedicated "golden note" provides the agent with persistent, foundational knowledge about your preferences, key facts, and standing instructions.
   - **Session summaries** are automatically stored as notes in your Obsidian vault.
@@ -25,12 +26,18 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 
 - 🧹 **Chores:**
   - Prevent logging tool calls in case of "priave mode".
-- ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
-- 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
-- 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
-- 📱 Mobile version of the agent: running some or all of the LLMs from the device, while having access to a shared memory layer.
-- 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
-- 🧑‍🧒‍🧒 Multiple Agents: Supporting different personalities and purposes.
+  - Consolidate handling of Community and MCP tools.
+  - Improve documentation for using and setting up MCP tools.
+- 🔜 **Near-shore:**
+  - Consider replacing the Obsidian service with an [MCP](https://mcpservers.org/servers/MarkusPfundstein/mcp-obsidian)
+  - Consider replacing web search tools with [Tavily](https://www.tavily.com/)
+- 🚀 **Futuristic:**
+  - ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
+  - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
+  - 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
+  - 📱 Mobile version of the agent: running some or all of the LLMs from the device, while having access to a shared memory layer.
+  - 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
+  - 🧑‍🧒‍🧒 Multiple Agents: Supporting different personalities and purposes.
 
 ## 🖼️ Showcase
 
@@ -132,6 +139,11 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 | `SEMANTIC_SEARCH_K_VALUE`| Number of search results to retrieve.                              | `5`                                   |
 | `USE_CORE_MEMORY`        | Toggle to include the "golden note" functionallity.                | `true`                                |
 | `CORE_MEMORY_FILENAME`   | File name for the "golden note" under the `AGENT_FOLDER_NAME`.     | `_core_memory.md`                     |
+| `USE_MCP_TOOLS`          | Toggle to include MCP tools from servers in `tools/mcp_tools.py`.  | `false`                               |
+| `PIPEDREAM_TAVILY_URL`   | Configuration var. needed for the Example MCP tool.                | -                                     |
+
+USE_MCP_TOOLS
+PIPEDREAM_TAVILY_URL
 
 ## ▶️ Usage
 
@@ -250,6 +262,12 @@ TOOL_CONFIG_OVERRIDES = {
 ```
 
 Now, when the Butler starts, it will automatically load the OpenWeatherMap tool, ready for use!
+
+### ⚡️ Extending with MCP Server Tools
+
+Sebastian can connect to a modern, standardized ecosystem of external tools using the Model Context Protocol (MCP). Think of MCP as a universal plug for AI tools—it allows your agent to discover and use tools from different providers without needing custom code for each one.
+
+*More detailed documnetation pending.*
 
 ### ⌨️ Running as a macOS Shortcut
 

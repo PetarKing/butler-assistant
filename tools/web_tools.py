@@ -5,6 +5,11 @@ import bs4
 import openai
 import requests
 from langchain_community.tools import DuckDuckGoSearchResults
+from langchain_community.document_loaders import AsyncHtmlLoader
+
+from langchain_community.document_loaders import AsyncHtmlLoader
+from langchain_community.document_transformers import MarkdownifyTransformer
+
 
 from config.settings import CHEAP_MODEL
 
@@ -126,3 +131,27 @@ def fetch_page(url: str) -> str:
         )
     except Exception as e:
         return f"[fetch_page-error] {e}"
+
+# Experimental: currently not used.
+# To use this, make sure, replace the
+# `registry.py`
+# >    "fetch_page": fetch_page,
+# with
+# >    "fetch_page": fetch_page_langchain,
+def fetch_page_langchain(url: str) -> str:
+    """
+    Download using LangChain's AsyncHtmlLoader,
+    convert to Markdown using `markdownify`, and return a snippet.
+    Args:
+        url: HTTP/HTTPS URL to fetch
+    Returns:
+        Markdown-formatted page content snippet or error message
+    """
+    try:
+        urls = [url]
+        page_html = AsyncHtmlLoader(urls).load()
+        page_markdown = MarkdownifyTransformer(strip="a").transform_documents(page_html)
+        
+        return page_markdown[0].page_content[:2000]
+    except Exception as e:
+        return f"[fetch_page_langchain-error] {e}"

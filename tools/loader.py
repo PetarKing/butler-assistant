@@ -4,13 +4,13 @@ from .registry import (
     OBSIDIAN_TOOL_IMPLEMENTATIONS, OBSIDIAN_TOOL_SCHEMAS,
     OBSIDIAN_FALLBACK_IMPLEMENTATIONS, OBSIDIAN_FALLBACK_SCHEMAS,
     CORE_MEMORY_TOOL_IMPLEMENTATION, CORE_MEMORY_TOOL_SCHEMA,
-    get_rag_tools, compute_community_tools
+    get_rag_tools, compute_community_tools, compute_mcp_tools
 )
 
 # --- Import settings ---
-from config.settings import INCLUDE_OBSIDIAN_TOOLS, USE_CORE_MEMORY
+from config.settings import INCLUDE_OBSIDIAN_TOOLS, USE_CORE_MEMORY, USE_MCP_TOOLS
 
-def initialize_app_tools(rag_service):
+async def initialize_app_tools(rag_service):
     """
     Initialize application tools based on configuration settings and return
     a tuple of (tool_implementations, tool_schemas).
@@ -27,7 +27,17 @@ def initialize_app_tools(rag_service):
     final_implementations.update(comm_implementations)
     final_schemas.extend(comm_schemas)
 
-    # 3. Conditionally add Obsidian-related tools
+    # 3. Conditionally add MCP tools
+    if USE_MCP_TOOLS:
+        try:
+            mcp_implementations, mcp_schemas = await compute_mcp_tools()
+            final_implementations.update(mcp_implementations)
+            final_schemas.extend(mcp_schemas)
+            print(f"🧰 Following MCP tools are available: {list(mcp_implementations.keys())}")
+        except Exception as e:
+            print(f"⚠️ Could not initialize MCP tools: {e}")
+
+    # 4. Conditionally add Obsidian-related tools
     if INCLUDE_OBSIDIAN_TOOLS:
         final_implementations.update(OBSIDIAN_TOOL_IMPLEMENTATIONS)
         final_schemas.extend(OBSIDIAN_TOOL_SCHEMAS)

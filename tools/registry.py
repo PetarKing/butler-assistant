@@ -4,9 +4,13 @@ Tool registry and configuration for the Butler Agent.
 This module centralizes all tool definitions, schemas, and loading logic.
 Tools are organized into categories: core, Obsidian, semantic search, and community tools.
 """
+import traceback
 
 from langchain_community import tools as community_tools
+from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_core.utils.function_calling import convert_to_openai_function
+
+from .mcp_tools import MCP_SERVERS_TO_CONNECT, MCP_TOOL_OVERRIDES
 
 from config.settings import COMMUNITY_TOOLS_TO_LOAD, SANDBOX_ROOT, TOOL_CONFIG_OVERRIDES
 from services.obsidian_service import (append_core_memory, append_note,
@@ -18,7 +22,7 @@ from .chat_tools import (enable_high_brain_power, enable_private_mode,
 from .semantic_search import (build_filtered_semantic_search,
                               build_semantic_search)
 from .system_tools import clipboard_content, screen_capture
-from .web_tools import calculator, fetch_page, web_search
+from .web_tools import calculator, fetch_page, web_search, fetch_page_langchain
 
 # ==========================================================================
 # CORE TOOLS - Always available across all configurations
@@ -323,3 +327,53 @@ def compute_community_tools():
             raise e
 
     return implementations, schemas
+
+async def compute_mcp_tools():
+    """
+    Discover and load MCP tools from configured servers.
+
+    Returns:
+        Tuple of (implementations_dict, schemas_list)
+    """
+    if not MCP_SERVERS_TO_CONNECT:
+        return {}, []
+
+    print("\n--- 🔎 Discovering MCP Tools ---")
+    mcp_implementations = {}
+    mcp_schemas = []
+
+    try:
+        client = MultiServerMCPClient(MCP_SERVERS_TO_CONNECT)
+        mcp_tools = await client.get_tools()
+
+        for tool in mcp_tools:
+            def create_async_wrapper(t):
+                async def async_wrapper(**kwargs):
+                    return await t.ainvoke(input=kwargs)
+                return async_wrapper
+            
+            if tool.name in MCP_TOOL_OVERRIDES:
+                # Apply any overrides for this tool
+                overrides = MCP_TOOL_OVERRIDES[tool.name]
+                tool.name = overrides.get("name", tool.name)
+                tool.description = overrides.get("description", tool.description)
+                if "parameters" in overrides:
+                    tool.parameters = overrides["parameters"]
+            mcp_implementations[tool.name] = create_async_wrapper(tool)
+            mcp_schemas.append(convert_to_openai_function(tool))
+            
+    except ExceptionGroup as e:
+        print("🔥 An MCP server connection failed. Here are the details:")
+        for i, error in enumerate(e.exceptions):
+            print(f"\n--- Sub-exception #{i+1} ---")
+            print(f"Error Type: {type(error).__name__}")
+            print(f"Error Details: {error}")
+            # This line will now work correctly
+            traceback.print_exc()
+        print("--------------------------")
+        return {}, []
+    # --- END NEW DEBUG BLOCK ---
+    except Exception as e:
+        print(f"⚠️ An unexpected error occurred while loading MCP tools: {e}")
+
+    return mcp_implementations, mcp_schemas
