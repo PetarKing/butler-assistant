@@ -21,6 +21,15 @@ Talk naturally with your assistant via microphone input and high-quality text-to
   - **Session summaries** are automatically stored as notes in your Obsidian vault.
   - **A searchable vector database** of your entire Obsidian vault acts as the agent's long-term memory for the RAG system.  
 
+## 🛠️ Future Improvements & Ideas
+
+- ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
+- 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
+- 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
+- 📱 Mobile version of the agent: running some or all of the LLMs from the device, while having access to a shared memory layer.
+- 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
+- 🧑‍🧒‍🧒 Multiple Agents: Supporting different personalities and purposes.
+
 ## 🛠 Installation
 
 1. **Clone the repo**  
@@ -335,14 +344,6 @@ graph TD
     ├── logging.py
     └── build_index.py   # Script to (re)create the semantic search index
 ```
-
-## 🛠️ Future Improvements & Ideas
-
-- ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
-- 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
-- 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
-- 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
-- 🧑‍🧒‍🧒 Multiple Agents: Supporting different personalities and purposes.
 
 ## 🚧 AI Assistance Disclaimer
 
