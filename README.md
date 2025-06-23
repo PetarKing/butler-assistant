@@ -37,9 +37,13 @@ Talk naturally with your assistant via microphone input and high-quality text-to
     - ➕ Allows for llm provider interchangability.
   - **Consider** adding utilities for [Docker MCP Toolkit](https://docs.docker.com/ai/mcp-catalog-and-toolkit/toolkit/) setup, then:
     - *Consider* replacing the Obsidian service with an [MCP](https://hub.docker.com/r/mcp/obsidian).
+      - ⚠ Should include a clean approach to switching between local and MCP Obsidian.
     - *Consider* using the [Memory MCP](https://hub.docker.com/r/mcp/memory) instead of the "golden memory".
+      - ⚠ Should include a clean approach to switching between local and MCP memory.
     - *Consider* replacing the Embeddings service with the [Chroma MCP](https://hub.docker.com/r/mcp/chroma).
+      - ⚠ Should include a clean approach to switching between local and MCP embeddings.
     - *Consider* replacing web search tools with [Tavily](https://hub.docker.com/r/mcp/tavily).
+      - ⚠ Should include a clean approach to switching between local and MCP web search.
 - 🚀 **Futuristic:**
   - ♻ Automatic Re-indexing: Make sure Obsidian is re-indexed regularly, or reactively.
   - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault, allowing for multi-device access.
