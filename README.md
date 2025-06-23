@@ -32,17 +32,17 @@ Talk naturally with your assistant via microphone input and high-quality text-to
     - Alternatively, use a [Chroma MCP](https://hub.docker.com/r/mcp/chroma) to manage multiple vector stores.
   - ⚗️ Introduce test coverage, possibly including end-to-end using pre-recorded wav files, and llm-as-judge for assertions.
   - *Consider* using LangChat's chat wrapper for the butler agenet, to simplify tool importing and usage.
-    - ⚠ Concerns around locking in, and unforseen complexity.
+    - ⚠️ Concerns around locking in, and unforseen complexity.
     - ➕ Allows for llm provider interchangability.
   - **Consider** adding utilities for [Docker MCP Toolkit](https://docs.docker.com/ai/mcp-catalog-and-toolkit/toolkit/) setup, then:
     - *Consider* replacing the Obsidian service with an [MCP](https://hub.docker.com/r/mcp/obsidian).
-      - ⚠ Should include a clean approach to switching between local and MCP Obsidian.
+      - ⚠️ Should include a clean approach to switching between local and MCP Obsidian.
     - *Consider* using the [Memory MCP](https://hub.docker.com/r/mcp/memory) instead of the "golden memory".
-      - ⚠ Should include a clean approach to switching between local and MCP memory.
+      - ⚠️ Should include a clean approach to switching between local and MCP memory.
     - *Consider* replacing the Embeddings service with the [Chroma MCP](https://hub.docker.com/r/mcp/chroma).
-      - ⚠ Should include a clean approach to switching between local and MCP embeddings.
+      - ⚠️ Should include a clean approach to switching between local and MCP embeddings.
     - *Consider* replacing web search tools with [Tavily](https://hub.docker.com/r/mcp/tavily).
-      - ⚠ Should include a clean approach to switching between local and MCP web search.
+      - ⚠️ Should include a clean approach to switching between local and MCP web search.
 - 🚀 **Futuristic:**
   - ⏰ Scheduled Tasks: Allow the agent to perform tasks at scheduled times, such as daily summaries or reminders.
     - Would ideally include a way to reach out to the user via a notification or a (eg. slack) message.
@@ -177,7 +177,7 @@ Speak naturally when prompted. You can also create a shell alias or install via 
 - **Quit Chat**: say “bye”, “exit”, or “good night”, or similar 
 - **Reset Chat**: say “reset chat”, or similar
 - **High Brain Power**: say “high brain power mode”, or similar
-  - ⚠️ Make sure your OpenAI project has the "stronger" model enabled.
+  - ⚠️️ Make sure your OpenAI project has the "stronger" model enabled.
 - **Private Mode**: say “private mode”, or similar
 
 ### 🧠 Core Memory (The "Golden Note")
@@ -304,7 +304,7 @@ mcp_servers:
 
 Every MCP server can have multiple tools, and you can enable or disable them individually, as needed. The `override` section allows you to customize the tool's name and description, as shown to the LLM.
 
-⚠️ **Note:** if no specific tool is configured in the `tools_config.yaml`, or the MCP's `tools` list is not set, all tools provided by the MCP server will be available to the agent.
+⚠️️ **Note:** if no specific tool is configured in the `tools_config.yaml`, or the MCP's `tools` list is not set, all tools provided by the MCP server will be available to the agent.
 
 ### ⌨️ Running as a macOS Shortcut
 
@@ -341,7 +341,7 @@ cd "/path-to-your-project-folder"
 ```
 
 Crucially, replace '/path/to/your/project/folder' with the actual path you copied in Step 1. Make sure to keep the quotes around the path.
-Note ⚠️- you may need to use `.venv/bin/python` depending on your python setup.
+Note ⚠️️- you may need to use `.venv/bin/python` depending on your python setup.
 
 #### Step 3: Assign a Keyboard Hotkey
 
