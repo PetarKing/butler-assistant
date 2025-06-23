@@ -3,6 +3,7 @@ Main entrypoint for the ButlerAgent application.
 Initializes the toolset based on configuration and runs the voice chat loop.
 """
 from tools.loader import initialize_app_tools
+from tools.config_loader import get_settings
 import asyncio
 import time
 
@@ -11,8 +12,7 @@ import openai
 from agents.butler_agent import ButlerAgent
 from config.personality import ASSISTANT_NAME
 # --- Import settings ---
-from config.settings import (ENABLE_SEMANTIC_SEARCH,
-                             IDLE_EXIT_SEC,
+from config.settings import (IDLE_EXIT_SEC,
                              STT_MODEL)
 from services.audio_service import play_waiting_music, record
 from services.embeddings import EmbeddingService
@@ -30,7 +30,9 @@ async def initialize_app():
     rag_service = None
     embedding_future = None
     
-    if ENABLE_SEMANTIC_SEARCH:
+    tool_settings = get_settings()
+    
+    if tool_settings["use_semantic_search"]:
         rag_service = EmbeddingService()
         loop = asyncio.get_running_loop()
         embedding_future = loop.run_in_executor(None, rag_service.load)

@@ -1,0 +1,89 @@
+# Unified Configuration for All Tools
+# Controls which tools are available to the Butler Agent
+
+# Global settings and feature flags
+settings:
+  # Core feature flags
+  use_mcp_tools: true
+  include_obsidian_tools: true
+  use_core_memory: true
+  use_semantic_search: true
+
+  # Core required API key - always needed regardless of tool configuration
+  env_vars:
+    OPENAI_API_KEY: required
+
+# Core internal tools configuration
+core_tools:
+  - name: "quit_chat"
+    enabled: true
+  - name: "reset_chat"
+    enabled: true
+  - name: "web_search"
+    enabled: true
+  - name: "calculator"
+    enabled: true
+  - name: "fetch_page"
+    enabled: true
+  - name: "screen_capture"
+    enabled: true
+  - name: "clipboard_content"
+    enabled: true
+  - name: "enable_high_brain_power"
+    enabled: true
+  - name: "enable_private_mode"
+    enabled: true
+
+# Obsidian-related tools
+obsidian_tools:
+  - name: "read_note"
+    enabled: true
+  - name: "append_note"
+    enabled: true
+
+# Core memory tools
+memory_tools:
+  - name: "append_core_memory"
+    enabled: true
+
+# Fallback tools when RAG is disabled
+fallback_tools:
+  - name: "read_entire_memory"
+    enabled: true
+  - name: "list_vault_files" 
+    enabled: true
+
+# LangChain Community Tools to load
+community_tools:
+  - name: "BraveSearch"
+    enabled: false
+    # Environment variables required only if this tool is enabled
+    required_env_vars:
+      - BRAVE_SEARCH_API_KEY
+    override:
+      init_args:
+        api_key: "${BRAVE_SEARCH_API_KEY}"
+      name: "fallback_web_search"
+      description: "Fallback search engine using Brave Search. Use this in case of Rate Limit errors with the primary search engine."
+
+  - name: "ArxivQueryRun"
+    enabled: true
+    override:
+      name: "arxiv_query_run"
+      description: "Query Arxiv for academic papers."
+
+# MCP Server Configuration
+mcp_servers:
+  - name: "tavily_search"
+    enabled: false
+    transport: "streamable_http"
+    url: "${PIPEDREAM_TAVILY_URL}"
+    # Environment variables required only if this server is enabled
+    required_env_vars:
+      - PIPEDREAM_TAVILY_URL
+    tools:
+      - name: "TAVILY-SEND-QUERY"
+        enabled: true
+        override:
+          name: "ai_web_search"
+          description: "Search the web using Tavily AI."

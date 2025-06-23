@@ -33,3 +33,6 @@ cached/
 
 # macOS specific files
 .DS_Store
+
+# Tool Configuration
+tools_config.yaml

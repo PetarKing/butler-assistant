@@ -8,6 +8,7 @@ Sebastian is a voice-activated AI assistant that listens to your voice, executes
 Talk naturally with your assistant via microphone input and high-quality text-to-speech responses.
 
 - **Powerful Tool Integration**
+  - **Centralized YAML Configuration:** All tools— Core, Obsidian, Community, and MCPs—are managed from a single `tools_config.yaml` file. Easily toggle features, configure API keys, and even override tool names and descriptions from one place.
   - **Core Tools**: Web Search (DuckDuckGo), Web Page Summaries, Calculator, Screen Capture Analysis, and Clipboard Access.
   - **Advanced Obsidian Integration:**
     - **Semantic Search (RAG):** Ask questions about your notes and get context-aware answers. Sebastian finds conceptually related information, even without exact keywords.
@@ -98,12 +99,17 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 
    Note: If you plan to use community tools, you will need to install their specific dependencies separately. See the "Extending with Community Tools" section below.
 
-4. **Configure environment**  
-   Copy the sample and set your keys:
-   ```bash
-   cp .env.example .env
-   ```
-   Then edit `.env` to include your OpenAI API key and other settings.
+4. **Configure Environment & Tools**
+
+**Environment Variables:** Copy the sample `.env.example` file. This file holds your secret keys and high-level settings.
+
+```Bash
+cp .env.example .env
+```
+
+Then edit `.env` to include your `OPENAI_API_KEY` and any other required secrets (e.g., `BRAVE_SEARCH_API_KEY`, `PIPEDREAM_TAVILY_URL`).
+
+**Tool Configuration:** Copy the sample `tools_config.example.yaml` and rename to `tools_config.yaml`. This file is your control panel for all of Sebastian's tools.
 
 5.  **(Optional) Build the Semantic Search Index**  
    To enable the powerful semantic search feature, you must first index your vault. See the "Activating Your Second Brain" section below for instructions.
@@ -128,21 +134,16 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 | `ENERGY_THRESHOLD`       | Energy threshold for trimming leading silence                      | `300`                                 |
 | `WAITING_WAV`            | Path to the waiting sound file                                     | `waiting.wav`                         |
 | `WAITING_VOLUME`         | Volume for the waiting sound (0.0–1.0)                             | `0.3`                                 |
-| `OBSIDIAN_PATH`          | Absolute path to your Obsidian vault                               | —                                     |
+| `OBSIDIAN_VAULT_PATH`    | Absolute path to your Obsidian vault                               | —                                     |
 | `AGENT_FOLDER_NAME`      | Relative sandbox folder inside vault                               | `Butler`                              |
 | `ASSISTANT_NAME`         | Name of the assistant, used in prompts.                            | `Sebatian`                            |
 | `USER_NAME`              | Name of the user (you), used in prompts.                           | `User`                                |
 | `SESSION_SUMMARY_PREFIX` | Prefix for session summary filenames                               | `session-summary-`                    |
 | `TOOL_CALL_FILE_NAME`    | Filename for combined tool-call log under logs subfolder           | `tool-calls.md`                       |
-| `INCLUDE_OBSIDIAN_TOOLS` | Toggle to include Obsidian-based tools in the assistant            | `true`                                |
-| `COMMUNITY_TOOLS_TO_LOAD`| Comma-separated list of langchain-community tool classes           | `ArxivQueryRun`                       |
-| `ENABLE_SEMANTIC_SEARCH` | (Requires INCLUDE_OBSIDIAN_TOOLS=true) Enables RAG.                | `false`                               |
 | `CHROMA_DB_PATH`         | Folder name for the persistent vector database.                    | `cached/obsidian_chroma_db`           |
 | `EMBEDDING_MODEL_NAME`   | The model used to create embeddings.                               | `thenlper/gte-large`                  |
 | `SEMANTIC_SEARCH_K_VALUE`| Number of search results to retrieve.                              | `5`                                   |
-| `USE_CORE_MEMORY`        | Toggle to include the "golden note" functionallity.                | `true`                                |
 | `CORE_MEMORY_FILENAME`   | File name for the "golden note" under the `AGENT_FOLDER_NAME`.     | `_core_memory.md`                     |
-| `USE_MCP_TOOLS`          | Toggle to include MCP tools from servers in `tools/mcp_tools.py`.  | `false`                               |
 | `PIPEDREAM_TAVILY_URL`   | Configuration var. needed for the Example MCP tool.                | -                                     |
 
 USE_MCP_TOOLS
@@ -391,18 +392,23 @@ graph TD
 │   └── butler_agent.py
 ├── config/              # Configuration modules
 │   ├── personality.py
-│   └── settings.py
+│   ├── settings.py
+│   └── tools_config.yaml       # CONTROL PANEL FOR ALL TOOLS
 ├── services/            # Core services (STT, TTS, Obsidian I/O)
 │   ├── audio_service.py
 │   ├── obsidian_service.py
 │   ├── embeddings.py    # RAG service
 │   └── tts_service.py
-├── tools/               # Tool implementations
-│   ├── registry.py      # Mapping various functions as tools for the LLM to use
-│   ├── loader.py        # Tool loading and initialization logic
+├── tools/
+│   ├── config_loader.py                # Loads the setup from the `tools_config.yaml` file
+│   ├── internal_tools_registry.py      # Mapping various custom functions as tools for the LLM to use
+│   ├── external_tools_loader.py        # Loading community and MCP tools
+│   ├── internal_tools_registry.py      # Mapping various custom functions as tools for the LLM to use
+│   ├── loader.py                       # Final tool loading and initialization logic
 │   ├── chat_tools.py
 │   ├── system_tools.py
-│   └── web_tools.py
+│   ├── web_tools.py
+│   └── semantic_search.py
 └── utils/               # Helper functions and logging
     ├── logging.py
     └── build_index.py   # Script to (re)create the semantic search index
