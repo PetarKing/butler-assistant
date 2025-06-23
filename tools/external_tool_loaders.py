@@ -3,7 +3,6 @@ External tool loaders for Butler Agent.
 
 Contains functions to load external tools from community libraries and MCP servers.
 """
-import traceback
 from langchain_community import tools as community_tools
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_core.utils.function_calling import convert_to_openai_function
