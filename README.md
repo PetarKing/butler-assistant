@@ -28,19 +28,24 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 - 🧹 **Chores:**
   - Improve documentation for using and setting up MCP & Community tools.
 - 🔜 **Near-shore:**
-  - 🕷️ Introduce separate vector stores, web-scraper (like [craw4ai](https://github.com/unclecode/crawl4ai)), and management util to list and delete stores easily
-    - Making sure model is aware of them, and can choose which one to search using embedding search tools we already have
-    - Optionally, create a tool for the agent to populate a new vector store based on a web domain
-  - ⚗️ Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions
-  - *Consider* using LangChat's chat wrapper for the butler agenet, to simplify tool importing and usage. Concerns around locking in, and unforseen complexity.
-  - *Consider* replacing the Obsidian service with an [MCP](https://github.com/MarkusPfundstein/mcp-obsidian)
-  - *Consider* replacing the Embeddings service with an [MCP](hhttps://github.com/chroma-core/chroma-mcp)
-  - *Consider* replacing web search tools with [Tavily](https://www.tavily.com/)
+  - 🕷️ Introduce separate vector stores, web-scraper (like [craw4ai](https://github.com/unclecode/crawl4ai)), and management util to list and delete stores easily.
+    - Making sure model is aware of them, and can choose which one to search using embedding search tools we already have.
+    - Optionally, create a tool for the agent to populate a new vector store based on a web domain.
+  - ⚗️ Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions.
+  - *Consider* using LangChat's chat wrapper for the butler agenet, to simplify tool importing and usage.
+    - ⚠ Concerns around locking in, and unforseen complexity.
+    - ➕ Allows for llm provider interchangability.
+  - **Consider** adding utilities for [Docker MCP Toolkit](https://docs.docker.com/ai/mcp-catalog-and-toolkit/toolkit/) setup, then:
+    - *Consider* replacing the Obsidian service with an [MCP](https://hub.docker.com/r/mcp/obsidian).
+    - *Consider* using the [Memory MCP](https://hub.docker.com/r/mcp/memory) instead of the "golden memory".
+    - *Consider* replacing the Embeddings service with the [Chroma MCP](https://hub.docker.com/r/mcp/chroma).
+    - *Consider* replacing web search tools with [Tavily](https://hub.docker.com/r/mcp/tavily).
 - 🚀 **Futuristic:**
-  - ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
-  - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
-  - 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
+  - ♻ Automatic Re-indexing: Make sure Obsidian is re-indexed regularly, or reactively.
+  - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault, allowing for multi-device access.
   - 📱 Mobile version of the agent: running some or all of the LLMs from the device, while having access to a shared memory layer.
+  - 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
+    - Alternatively, use a [Memory MCP](https://hub.docker.com/r/mcp/memory).
   - 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
   - 🧑‍🧒‍🧒 Multiple Agents: Supporting different personalities and purposes.
 
