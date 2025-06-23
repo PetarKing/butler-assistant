@@ -28,7 +28,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 - 🧹 **Chores:**
   - Improve documentation for using and setting up MCP & Community tools.
 - 🔜 **Near-shore:**
-  - 🕷️ Introduce separate vector stores, web-scraper (like [craw4ai]()), and management utils (list and delete stores easily)
+  - 🕷️ Introduce separate vector stores, web-scraper (like [craw4ai](https://github.com/unclecode/crawl4ai)), and management util to list and delete stores easily
     - Making sure model is aware of them, and can choose which one to search using embedding search tools we already have
     - Optionally, create a tool for the agent to populate a new vector store based on a web domain
   - ⚗️ Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions
