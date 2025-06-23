@@ -14,9 +14,10 @@ from langchain_core.tools import BaseTool
 
 from config.personality import SYSTEM_PROMPT
 from config.settings import (AGENT_FOLDER_NAME, CORE_MEMORY_FILENAME,
-                             HIGH_POWER_MODEL, MODEL_NAME, USE_CORE_MEMORY)
+                             HIGH_POWER_MODEL, MODEL_NAME)
 from services.obsidian_service import read_note, recent_session_summaries
 from utils.logging import log_tool_call
+from tools.config_loader import get_settings
 
 
 class ButlerAgent:
@@ -58,12 +59,16 @@ class ButlerAgent:
         self.tool_implementations = tool_implementations
         self.tool_schemas = tool_schemas
 
+        # Get settings from the unified configuration
+        self.settings = get_settings()
+        self.use_core_memory = self.settings.get("use_core_memory", False)
+
         self._load_core_memory()
         self._load_recent_memories()
 
     def _load_core_memory(self):
         """Load core memory from the designated file if enabled."""
-        if not USE_CORE_MEMORY:
+        if not self.use_core_memory:
             return
         try:
             core_memory_content = read_note(

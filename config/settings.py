@@ -5,8 +5,10 @@ This module loads environment variables and defines constants for:
 - Audio processing settings
 - AI model configurations
 - File system paths for Obsidian integration
-- Tool loading and configuration
-- Semantic search settings
+- Voice processing settings
+- TTS/STT configurations
+
+Tool-specific settings are managed through the YAML configuration system.
 """
 
 import os
@@ -18,7 +20,6 @@ load_dotenv(override=True)
 
 # Audio processing settings
 RATE, CHUNK = 16000, 1024
-VOICE_ID = os.getenv("CARTESIA_VOICE_ID")
 
 # AI model configurations
 MODEL_NAME = os.getenv("OPENAI_MODEL", "o4-mini-2025-04-16")
@@ -42,40 +43,6 @@ VAD_AGGRESSIVENESS = int(os.getenv("VAD_AGGRESSIVENESS", "2"))
 # Debug settings
 DEBUG_AUDIO = os.getenv("DEBUG_AUDIO", "false").lower() in ("1", "true", "yes")
 
-# Community tools configuration
-_tools_env_string = os.getenv("COMMUNITY_TOOLS_TO_LOAD")
-if _tools_env_string:
-    COMMUNITY_TOOLS_TO_LOAD = [tool.strip()
-                               for tool in _tools_env_string.split(",")]
-else:
-    COMMUNITY_TOOLS_TO_LOAD = []
-
-# Controlling MCP tools usage
-USE_MCP_TOOLS = os.getenv("USE_MCP_TOOLS", "false").lower() in ("1", "true", "yes")
-if USE_MCP_TOOLS:
-    # Manually load dependencies for MCP tools you defined in `mcp_tools.py`
-    PIPEDREAM_TAVILY_URL = os.getenv("PIPEDREAM_TAVILY_URL")
-
-# Tool-specific configuration overrides
-TOOL_CONFIG_OVERRIDES = {
-    # Example: Fallback Search Engine
-    #   -> make sure `COMMUNITY_TOOLS_TO_LOAD` includes "BraveSearch"
-    #   -> set `BRAVE_SEARCH_API_KEY` in your .env file
-    "BraveSearch": {
-        "init_args": {
-            "api_key": os.getenv("BRAVE_SEARCH_API_KEY"),
-        },
-        "function_name": "fallback_web_search",
-        "function_description": "Fallback search engine using Brave Search. Use this in case of Rate Limit errors with the primary search engine.",
-    }
-}
-
-# Obsidian vault integration settings
-INCLUDE_OBSIDIAN_TOOLS = os.getenv("INCLUDE_OBSIDIAN_TOOLS", "true").lower() in (
-    "1",
-    "true",
-    "yes",
-)
 VAULT_ROOT = Path(os.getenv("OBSIDIAN_VAULT_PATH")).expanduser().resolve()
 AGENT_FOLDER_NAME = os.getenv("AGENT_FOLDER_NAME", "Butler")
 ASSISTANT_NAME = os.getenv("ASSISTANT_NAME", "Sebastian")
@@ -102,11 +69,8 @@ STT_MODEL = os.getenv("OPENAI_STT_MODEL", "gpt-4o-mini-transcribe")
 
 # API keys
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-BRAVE_SEARCH_API_KEY = os.getenv("BRAVE_SEARCH_API_KEY")
 
-# Semantic search and RAG settings
-ENABLE_SEMANTIC_SEARCH = os.getenv(
-    "ENABLE_SEMANTIC_SEARCH", "false").lower() == "true"
+# RAG settings (the ON/OFF switch is in the tools config yaml file)
 CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "cached/obsidian_chroma_db")
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "thenlper/gte-large")
 SEMANTIC_SEARCH_K_VALUE = int(os.getenv("SEMANTIC_SEARCH_K_VALUE", 5))

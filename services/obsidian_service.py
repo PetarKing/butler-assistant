@@ -5,7 +5,7 @@ import openai
 
 from config.personality import SUMMARY_SYSTEM_PROMPT
 from config.settings import (CHEAP_MODEL, CORE_MEMORY_FILENAME,
-                             INCLUDE_OBSIDIAN_TOOLS, LOG_SUBDIR, SANDBOX_ROOT,
+                             LOG_SUBDIR, SANDBOX_ROOT,
                              SUMMARY_PREFIX, VAULT_ROOT)
 
 
@@ -116,9 +116,6 @@ def recent_session_summaries(n: int = 3) -> str:
     Returns:
         Concatenated content of the n most recent summaries
     """
-    if not INCLUDE_OBSIDIAN_TOOLS:
-        return "[memory] Obsidian memory disabled"
-
     mem_files = sorted(
         LOG_SUBDIR.glob(f"{SUMMARY_PREFIX}*.md"),
         key=lambda p: p.stat().st_mtime,
@@ -137,11 +134,7 @@ def save_session_summary(history: list[dict]) -> None:
     Args:
         history: List of message dictionaries containing conversation history
     """
-    if not INCLUDE_OBSIDIAN_TOOLS:
-        return
-
     try:
-
         def role_and_content(msg):
             """Extract role and content from message object or dict."""
             if isinstance(msg, dict):

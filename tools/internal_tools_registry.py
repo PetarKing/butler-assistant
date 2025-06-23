@@ -4,15 +4,8 @@ Tool registry and configuration for the Butler Agent.
 This module centralizes all tool definitions, schemas, and loading logic.
 Tools are organized into categories: core, Obsidian, semantic search, and community tools.
 """
-import traceback
 
-from langchain_community import tools as community_tools
-from langchain_mcp_adapters.client import MultiServerMCPClient
-from langchain_core.utils.function_calling import convert_to_openai_function
-
-from .mcp_tools import MCP_SERVERS_TO_CONNECT, MCP_TOOL_OVERRIDES
-
-from config.settings import COMMUNITY_TOOLS_TO_LOAD, SANDBOX_ROOT, TOOL_CONFIG_OVERRIDES
+from config.settings import SANDBOX_ROOT
 from services.obsidian_service import (append_core_memory, append_note,
                                        list_vault_files, read_entire_memory,
                                        read_note)
@@ -281,99 +274,3 @@ def get_rag_tools(rag_service):
         },
     ]
     return implementations, schemas
-
-
-# ==========================================================================
-# COMMUNITY TOOLS - LangChain community tool integration
-# ==========================================================================
-
-
-def compute_community_tools():
-    """
-    Create community tool definitions based on configuration.
-
-    Returns:
-        Tuple of (implementations_dict, schemas_list)
-    """
-    implementations = {}
-    schemas = []
-
-    if not isinstance(COMMUNITY_TOOLS_TO_LOAD, list) or not COMMUNITY_TOOLS_TO_LOAD:
-        return implementations, schemas
-
-    for tool_name in COMMUNITY_TOOLS_TO_LOAD:
-        # Apply any override configuration for this tool
-        overrides = TOOL_CONFIG_OVERRIDES.get(tool_name, {})
-        init_args = overrides.get("init_args", {})
-        # Optional override for the tool name shown to OpenAI
-        override_name = overrides.get("function_name")
-        override_description = overrides.get("function_description")
-        try:
-            tool_class = getattr(community_tools, tool_name)
-            # Instantiate with overrides if provided
-            if init_args:
-                tool_instance = tool_class(**init_args)
-            else:
-                tool_instance = tool_class()
-            # Apply name override if provided
-            if override_name:
-                tool_instance.name = override_name
-            if override_description:
-                tool_instance.description = override_description
-            implementations[tool_instance.name] = tool_instance
-            schemas.append(convert_to_openai_function(tool_instance))
-        except Exception as e:
-            print(f"Failed to load community tool '{tool_name}': {e}")
-            raise e
-
-    return implementations, schemas
-
-async def compute_mcp_tools():
-    """
-    Discover and load MCP tools from configured servers.
-
-    Returns:
-        Tuple of (implementations_dict, schemas_list)
-    """
-    if not MCP_SERVERS_TO_CONNECT:
-        return {}, []
-
-    print("\n--- 🔎 Discovering MCP Tools ---")
-    mcp_implementations = {}
-    mcp_schemas = []
-
-    try:
-        client = MultiServerMCPClient(MCP_SERVERS_TO_CONNECT)
-        mcp_tools = await client.get_tools()
-
-        for tool in mcp_tools:
-            def create_async_wrapper(t):
-                async def async_wrapper(**kwargs):
-                    return await t.ainvoke(input=kwargs)
-                return async_wrapper
-            
-            if tool.name in MCP_TOOL_OVERRIDES:
-                # Apply any overrides for this tool
-                overrides = MCP_TOOL_OVERRIDES[tool.name]
-                tool.name = overrides.get("name", tool.name)
-                tool.description = overrides.get("description", tool.description)
-                if "parameters" in overrides:
-                    tool.parameters = overrides["parameters"]
-            mcp_implementations[tool.name] = create_async_wrapper(tool)
-            mcp_schemas.append(convert_to_openai_function(tool))
-            
-    except Exception as e:
-    # Check if it's the specific group error we were looking for
-        if "ExceptionGroup" in type(e).__name__:
-            print("🔥 An MCP server connection failed. Here are the details:")
-            # The 'e.exceptions' attribute is specific to ExceptionGroup
-            for i, error in enumerate(e.exceptions):
-                print(f"\n--- Sub-exception #{i+1} ---")
-                print(f"Error Type: {type(error).__name__}")
-                print(f"Error Details: {error}")
-                traceback.print_exc()
-        else:
-            # Handle any other potential exceptions
-            print(f"⚠️ An unexpected error occurred while loading MCP tools: {e}")
-
-    return mcp_implementations, mcp_schemas
