@@ -49,6 +49,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
   - ♻ Automatic Re-indexing: Make sure Obsidian is re-indexed regularly, or reactively.
   - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault, allowing for multi-device access.
   - 📱 Mobile version of the agent: running some or all of the LLMs from the device, while having access to a shared memory layer.
+    - Alternatively, consider a chat service that supports text and voice-based bots, such as [Telegram](https://core.telegram.org/bots/api) or [Discord](https://discord.com/developers/docs/intro).
   - 🕵️‍♀️ Advanced RAG Strategies: Implement more complex retrieval methods, such as re-ranking results or using graph-based navigation on top of semantic search.
     - Alternatively, use a [Memory MCP](https://hub.docker.com/r/mcp/memory).
   - 🎙️ Advanced Voice Mode: Allowing the ability to interrupt the model mid-speech.
