@@ -27,8 +27,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 
 - 🧹 **Chores:**
   - Prevent logging tool calls in case of "priave mode".
-  - Consolidate handling of Community and MCP tools.
-  - Improve documentation for using and setting up MCP tools.
+  - Improve documentation for using and setting up MCP & Community tools.
 - 🔜 **Near-shore:**
   - Provide model with it's own Sandbox folder project structure, to avoid it getting messy
   - Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions
