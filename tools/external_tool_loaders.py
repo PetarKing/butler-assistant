@@ -83,8 +83,8 @@ async def load_mcp_tools(server_configs):
     print("\n--- 🔎 Discovering MCP Tools ---")
     
     # Process servers and extract necessary configuration
-    processed_servers_dict = {}  # Changed to a dictionary
-    tool_overrides = {}
+    processed_servers_dict = {}
+    tool_configurations = {}  # Store tool configs by server name
     
     for i, server in enumerate(server_configs):
         # Skip if required environment variables are missing
@@ -102,11 +102,8 @@ async def load_mcp_tools(server_configs):
             'url': server.get('url')
         }
         
-        # Process tool overrides for this server
-        for tool in server.get('tools', []):
-            if tool.get('enabled', True) and 'name' in tool:
-                if 'override' in tool:
-                    tool_overrides[tool['name']] = tool['override']
+        # Store tool configurations for this server (only explicitly mentioned tools)
+        tool_configurations[server_name] = {tool['name']: tool for tool in server.get('tools', [])}
     
     if not processed_servers_dict:
         return implementations, schemas
@@ -116,18 +113,34 @@ async def load_mcp_tools(server_configs):
         mcp_tools = await client.get_tools()
 
         for tool in mcp_tools:
+            server_name = None
+            tool_config = None
+            
+            for name, configs in tool_configurations.items():
+                if tool.name in configs:
+                    server_name = name
+                    tool_config = configs[tool.name]
+                    break
+            
+            # If tool is explicitly mentioned in config, check if it's disabled
+            if tool_config is not None:
+                if not tool_config.get('enabled', True):
+                    print(f"⚠️ Skipping disabled tool: {tool.name}")
+                    continue
+                
+                # Apply overrides if present
+                if 'override' in tool_config:
+                    overrides = tool_config['override']
+                    tool.name = overrides.get("name", tool.name)
+                    tool.description = overrides.get("description", tool.description)
+                    if "parameters" in overrides:
+                        tool.parameters = overrides["parameters"]
+            
+            # If tool is not mentioned in config OR is mentioned and enabled, load it
             def create_async_wrapper(t):
                 async def async_wrapper(**kwargs):
                     return await t.ainvoke(input=kwargs)
                 return async_wrapper
-            
-            if tool.name in tool_overrides:
-                # Apply any overrides for this tool
-                overrides = tool_overrides[tool.name]
-                tool.name = overrides.get("name", tool.name)
-                tool.description = overrides.get("description", tool.description)
-                if "parameters" in overrides:
-                    tool.parameters = overrides["parameters"]
                     
             implementations[tool.name] = create_async_wrapper(tool)
             schemas.append(convert_to_openai_function(tool))

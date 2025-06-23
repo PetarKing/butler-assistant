@@ -235,54 +235,76 @@ Butler's real power comes from its ability to dynamically load tools from the ex
 
 #### Step 1: Find a Tool
 
-Browse the [LangChain Community Tools documentation](https://python.langchain.com/api_reference/community/tools.html) to find a tool you want to use. You will need the exact class name of the tool (e.g., OpenWeatherMapQueryRun).
+Browse the [LangChain Community Tools documentation](https://python.langchain.com/api_reference/community/tools.html) to find a tool you want to use. You will need the exact class name of the tool (e.g., BraveSearch).
 
 #### Step 2: Install the Dependency
 
-Most tools require a specific Python package. You must install it manually. For the weather tool, this would be:
+Some tools require a specific Python package. You must install it manually. For the weather tool, this would be:
 
 ```bash
 pip install openweathermap-api-client
 ```
 
+Alternarively, run the agent and observe the error message when trying to use the tool. It will suggest the required package.
+
 #### Step 3: Enable the Tool
 
-Set the `COMMUNITY_TOOLS_TO_LOAD` environment variable in your `.env` file. To add multiple tools, separate them with a comma.
+In the `tools_config.yaml` file, you can enable the tool by adding it to the `community_tools` section. For example, to enable the weather tool:
+
+```yaml
+community_tools:
+  - name: "BraveSearch"
+    enabled: true
+    required_env_vars:
+      - BRAVE_SEARCH_API_KEY
+```
 
 #### Step 4: Configure Arguments (If Needed)
 
-Some tools, like the weather tool, require an API key. You can provide these by editing the `TOOL_CONFIG_OVERRIDES` dictionary in `config/settings.py`.
-
-The system is designed to securely load keys from your environment variables.
-
-1. Add the secret key to your .env file:
-
-```python
-# .env file
-OPENWEATHERMAP_API_KEY="your_actual_api_key_here"
-```
-
-1. Add the configuration to config/settings.py:
-
-```python
-# config/settings.py
-TOOL_CONFIG_OVERRIDES = {
-    "OpenWeatherMapQueryRun": {
-        "init_args": {
-            "api_key": os.getenv("OPENWEATHERMAP_API_KEY")
-        }
-    },
-    # Add other tool configurations here
-}
-```
-
-Now, when the Butler starts, it will automatically load the OpenWeatherMap tool, ready for use!
+Some tools, like the Brave web search tool, require an API key.
+Make sure to reference the documentation for the specific tool to see what arguments it needs, include them in the `tools_config.yaml` file, and set the required environment variables in your `.env` file.
 
 ### ⚡️ Extending with MCP Server Tools
 
 Sebastian can connect to a modern, standardized ecosystem of external tools using the Model Context Protocol (MCP). Think of MCP as a universal plug for AI tools—it allows your agent to discover and use tools from different providers without needing custom code for each one.
 
-*More detailed documnetation pending.*
+#### Step 1: Assure an MCP Server is available
+
+To use MCP tools, you need to have an MCP server running. You can either set up your own or use a public one. For example, you can run them as Docker Images using [their tooling](https://docs.docker.com/ai/mcp-catalog-and-toolkit/toolkit/), or connect to a hosted service.
+
+#### Step 2: Enable MCP Tools in Configuration
+
+In your `tools_config.yaml`, enable MCP tools in the settings as shown below:
+
+```yaml
+settings:
+  use_mcp_tools: true
+```
+
+#### Step 3: Configure MCP Tools
+
+You can specify which MCP tools you want to use by adding them to the `mcp_tools` section. For example, to enable a web search tool:
+
+```yaml
+mcp_servers:
+  - name: "tavily_search"
+    enabled: true
+    transport: "streamable_http"
+    url: "${PIPEDREAM_TAVILY_URL}"
+    # Environment variables required only if this server is enabled
+    required_env_vars:
+      - PIPEDREAM_TAVILY_URL
+    tools:
+      - name: "TAVILY-SEND-QUERY"
+        enabled: true
+        override:
+          name: "ai_web_search"
+          description: "Search the web using Tavily AI."
+```
+
+Every MCP server can have multiple tools, and you can enable or disable them individually, as needed. The `override` section allows you to customize the tool's name and description, as shown to the LLM.
+
+⚠️ **Note:** if no specific tool is configured in the `tools_config.yaml`, or the MCP's `tools` list is not set, all tools provided by the MCP server will be available to the agent.
 
 ### ⌨️ Running as a macOS Shortcut
 
