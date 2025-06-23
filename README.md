@@ -30,7 +30,8 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 - 🔜 **Near-shore:**
   - Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions
   - *Consider* using LangChat's chat wrapper for the butler agenet, to simplify tool importing and usage. Concerns around locking in, and unforseen complexity.
-  - *Consider* replacing the Obsidian service with an [MCP](https://mcpservers.org/servers/MarkusPfundstein/mcp-obsidian)
+  - *Consider* replacing the Obsidian service with an [MCP](https://github.com/MarkusPfundstein/mcp-obsidian)
+  - *Consider* replacing the Embeddings service with an [MCP](hhttps://github.com/chroma-core/chroma-mcp)
   - *Consider* replacing web search tools with [Tavily](https://www.tavily.com/)
 - 🚀 **Futuristic:**
   - ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
