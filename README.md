@@ -26,7 +26,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 ## 🛠️ Future Improvements & Ideas
 
 - 🧹 **Chores:**
-  - Improve documentation for using and setting up MCP & Community tools.
+  - /
 - 🔜 **Near-shore:**
   - 🕷️ Introduce separate vector stores, web-scraper (like [craw4ai](https://github.com/unclecode/crawl4ai)), and management util to list and delete stores easily.
     - Alternatively, use a [Chroma MCP](https://hub.docker.com/r/mcp/chroma) to manage multiple vector stores.
