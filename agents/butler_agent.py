@@ -15,7 +15,7 @@ from langchain_core.tools import BaseTool
 from config.personality import SYSTEM_PROMPT
 from config.settings import (AGENT_FOLDER_NAME, CORE_MEMORY_FILENAME,
                              HIGH_POWER_MODEL, MODEL_NAME)
-from services.obsidian_service import read_note, recent_session_summaries
+from services.obsidian_service import read_note, recent_session_summaries, sandbox_files
 from utils.logging import log_tool_call
 from tools.config_loader import get_settings
 
@@ -60,11 +60,13 @@ class ButlerAgent:
         self.tool_schemas = tool_schemas
 
         # Get settings from the unified configuration
-        self.settings = get_settings()
-        self.use_core_memory = self.settings.get("use_core_memory", False)
+        settings = get_settings()
+        self.use_obsidian = settings.get("include_obsidian_tools", False)
+        self.use_core_memory = self.use_obsidian and settings.get("use_core_memory", False)
 
         self._load_core_memory()
         self._load_recent_memories()
+        self._load_sandbox_files_list()
 
     def _load_core_memory(self):
         """Load core memory from the designated file if enabled."""
@@ -88,10 +90,18 @@ class ButlerAgent:
             print(
                 f"⚠️ An unexpected error occurred while loading core memory: {e}")
 
-    def _load_recent_memories(self):
-        """Load recent session summaries to provide context."""
+    def _load_recent_memories(self, n=1):
+        """Load recent session summaries to provide context.
+        Args:
+            n (int): Number of recent summaries to load
+            
+            Returns:
+                None
+        """
+        if not self.use_obsidian:
+            return
         try:
-            _memories_to_load = 3
+            _memories_to_load = n
             memories = recent_session_summaries(_memories_to_load)
             if memories.strip():
                 self.history.append(
@@ -101,6 +111,32 @@ class ButlerAgent:
                     }
                 )
                 print(f"✅ Last {_memories_to_load} chat summaries loaded successfully.")
+        except Exception as e:
+            print(f"[memory-load-error] {e}")
+
+    def _load_sandbox_files_list(self):
+        """Load the list of files in the sandbox folder.
+        Args:
+            None
+        Returns:
+            None
+        """
+        if not self.use_obsidian:
+            return
+        try:
+            sandbox_files_list = sandbox_files()
+            if sandbox_files_list and len(sandbox_files_list) > 0:
+                formatted_files = "\n".join(
+                    f"- {file}" for file in sandbox_files_list
+                )
+                self.history.append(
+                    {
+                        "role": "system",
+                        "content": f"In your Sandbox folder, you've previously created the following files:\n{formatted_files}",
+                    }
+                )
+                print(f"🏆 Butler had created {len(sandbox_files_list)} notes so far.")
+
         except Exception as e:
             print(f"[memory-load-error] {e}")
 

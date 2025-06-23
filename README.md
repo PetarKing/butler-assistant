@@ -29,7 +29,6 @@ Talk naturally with your assistant via microphone input and high-quality text-to
   - Prevent logging tool calls in case of "priave mode".
   - Improve documentation for using and setting up MCP & Community tools.
 - 🔜 **Near-shore:**
-  - Provide model with it's own Sandbox folder project structure, to avoid it getting messy
   - Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions
   - *Consider* using LangChat's chat wrapper for the butler agenet, to simplify tool importing and usage. Concerns around locking in, and unforseen complexity.
   - *Consider* replacing the Obsidian service with an [MCP](https://mcpservers.org/servers/MarkusPfundstein/mcp-obsidian)
@@ -137,7 +136,7 @@ Then edit `.env` to include your `OPENAI_API_KEY` and any other required secrets
 | `AGENT_FOLDER_NAME`      | Relative sandbox folder inside vault                               | `Butler`                              |
 | `ASSISTANT_NAME`         | Name of the assistant, used in prompts.                            | `Sebatian`                            |
 | `USER_NAME`              | Name of the user (you), used in prompts.                           | `User`                                |
-| `SESSION_SUMMARY_PREFIX` | Prefix for session summary filenames                               | `session-summary-`                    |
+| `SUMMARY_FOLDER` | Sub-folder for session summaries filenames                               | `sessions`                    |
 | `TOOL_CALL_FILE_NAME`    | Filename for combined tool-call log under logs subfolder           | `tool-calls.md`                       |
 | `CHROMA_DB_PATH`         | Folder name for the persistent vector database.                    | `cached/obsidian_chroma_db`           |
 | `EMBEDDING_MODEL_NAME`   | The model used to create embeddings.                               | `thenlper/gte-large`                  |

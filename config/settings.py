@@ -56,7 +56,7 @@ LOG_SUBDIR.mkdir(parents=True, exist_ok=True)
 # Logging configuration
 TOOL_CALL_FILE_NAME = os.getenv("TOOL_CALL_FILE_NAME", "tool-calls.md")
 TOOL_CALL_LOG_PATH = LOG_SUBDIR / TOOL_CALL_FILE_NAME
-SUMMARY_PREFIX = os.getenv("SESSION_SUMMARY_PREFIX", "session-summary-")
+SUMMARY_FOLDER = os.getenv("SESSION_SUMMARY_FOLDER", "summaries")
 
 # Core memory feature settings
 USE_CORE_MEMORY = os.getenv("USE_CORE_MEMORY", "false").lower() == "true"
