@@ -26,7 +26,6 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 ## 🛠️ Future Improvements & Ideas
 
 - 🧹 **Chores:**
-  - Prevent logging tool calls in case of "priave mode".
   - Improve documentation for using and setting up MCP & Community tools.
 - 🔜 **Near-shore:**
   - Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions

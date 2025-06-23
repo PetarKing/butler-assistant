@@ -231,7 +231,10 @@ class ButlerAgent:
             except Exception as e:
                 result = f"[{tname}-error] {e}"
 
-        log_tool_call(tname, targs, result)
+        # Log the tool call if not in private mode
+        if not self.private_chat:
+            log_tool_call(tname, targs, result)
+
         return {
             "role": "tool",
             "tool_call_id": call.id,
