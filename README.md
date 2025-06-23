@@ -29,8 +29,11 @@ Talk naturally with your assistant via microphone input and high-quality text-to
   - Consolidate handling of Community and MCP tools.
   - Improve documentation for using and setting up MCP tools.
 - 🔜 **Near-shore:**
-  - Consider replacing the Obsidian service with an [MCP](https://mcpservers.org/servers/MarkusPfundstein/mcp-obsidian)
-  - Consider replacing web search tools with [Tavily](https://www.tavily.com/)
+  - Provide model with it's own Sandbox folder project structure, to avoid it getting messy
+  - Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions
+  - *Consider* using LangChat's chat wrapper for the butler agenet, to simplify tool importing and usage. Concerns around locking in, and unforseen complexity.
+  - *Consider* replacing the Obsidian service with an [MCP](https://mcpservers.org/servers/MarkusPfundstein/mcp-obsidian)
+  - *Consider* replacing web search tools with [Tavily](https://www.tavily.com/)
 - 🚀 **Futuristic:**
   - ♻ Automatic Re-indexing: Create a file watcher to automatically update the vector index when notes are changed.
   - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault.
@@ -346,13 +349,18 @@ graph TD
         EmbeddingService -- Reads from --> ObsidianFiles
     end
 
-    subgraph "Tool Layer"
+    subgraph ToolLayer["Tool Layer"]
         direction TB
         WebTools["🌐 Web Tools"]
         SystemTools["⚙️ System Tools"]
         ChatTools["💬 Chat Commands"]
         ObsidianTools["📝 Note I/O & Memory Tools"]
         RAGTools["🔍 Semantic Search Tools"]
+    end
+
+     subgraph ExternalTools["External Tools"]
+        CommunityTools["🧩 Community Tools<br>(LangChain)"]
+        MCPServers["🔌 MCP Servers"]
     end
 
     subgraph "Output Layer"
@@ -364,10 +372,9 @@ graph TD
     STT -->|Transcribed Text| ButlerAgent
     CoreMemoryNote -- Is Read By --> ButlerAgent
     ButlerAgent -->|Function Calls| ToolLayer
-    ToolLayer --> RAGTools
     RAGTools -- Uses --> EmbeddingService
-    ToolLayer --> ObsidianTools
     ObsidianTools -- Writes to --> ObsidianFiles
+    ToolLayer -- Integrates --> ExternalTools
     ButlerAgent -->|Response Text| TTS
 ```
 
