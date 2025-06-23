@@ -29,9 +29,8 @@ Talk naturally with your assistant via microphone input and high-quality text-to
   - Improve documentation for using and setting up MCP & Community tools.
 - 🔜 **Near-shore:**
   - 🕷️ Introduce separate vector stores, web-scraper (like [craw4ai](https://github.com/unclecode/crawl4ai)), and management util to list and delete stores easily.
-    - Making sure model is aware of them, and can choose which one to search using embedding search tools we already have.
-    - Optionally, create a tool for the agent to populate a new vector store based on a web domain.
-  - ⚗️ Introduce test coverage, including end-to-end using pre-recorded wav files, and llm-as-judge for assertions.
+    - Alternatively, use a [Chroma MCP](https://hub.docker.com/r/mcp/chroma) to manage multiple vector stores.
+  - ⚗️ Introduce test coverage, possibly including end-to-end using pre-recorded wav files, and llm-as-judge for assertions.
   - *Consider* using LangChat's chat wrapper for the butler agenet, to simplify tool importing and usage.
     - ⚠ Concerns around locking in, and unforseen complexity.
     - ➕ Allows for llm provider interchangability.
@@ -45,6 +44,8 @@ Talk naturally with your assistant via microphone input and high-quality text-to
     - *Consider* replacing web search tools with [Tavily](https://hub.docker.com/r/mcp/tavily).
       - ⚠ Should include a clean approach to switching between local and MCP web search.
 - 🚀 **Futuristic:**
+  - ⏰ Scheduled Tasks: Allow the agent to perform tasks at scheduled times, such as daily summaries or reminders.
+    - Would ideally include a way to reach out to the user via a notification or a (eg. slack) message.
   - ♻ Automatic Re-indexing: Make sure Obsidian is re-indexed regularly, or reactively.
   - 🌐 Cloud Mode: connecting to an external embeddings store and/or Obsidian Vault, allowing for multi-device access.
   - 📱 Mobile version of the agent: running some or all of the LLMs from the device, while having access to a shared memory layer.
