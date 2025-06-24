@@ -65,6 +65,7 @@ CORE_MEMORY_FILENAME = os.getenv("CORE_MEMORY_FILENAME", "_core_memory.md")
 # Text-to-Speech and Speech-to-Text settings
 TTS_MODEL = os.getenv("OPENAI_TTS_MODEL", "gpt-4o-mini-tts")
 TTS_VOICE = os.getenv("OPENAI_TTS_VOICE", "alloy")
+TTS_IN_PARALLEL = os.getenv("TTS_IN_PARALLEL", "true").lower() in ("1", "true", "yes")
 STT_MODEL = os.getenv("OPENAI_STT_MODEL", "gpt-4o-mini-transcribe")
 
 # API keys

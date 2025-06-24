@@ -13,11 +13,12 @@ from agents.butler_agent import ButlerAgent
 from config.personality import ASSISTANT_NAME
 # --- Import settings ---
 from config.settings import (IDLE_EXIT_SEC,
-                             STT_MODEL)
+                             STT_MODEL,
+                             TTS_IN_PARALLEL)
 from services.audio_service import play_waiting_music, record
 from services.embeddings import EmbeddingService
 from services.obsidian_service import save_session_summary
-from services.tts_service import speak_custom
+from services.tts_service import speak_custom, speak_parallel
 
 async def initialize_app():
     """
@@ -105,7 +106,16 @@ async def voice_chat(agent, embedding_future=None):
         print(" " * 40, end="\r")
         if reply.strip():
             print(f"🤖 {reply}")
-            await speak_custom(reply, stop_chime)
+            
+            # Measure TTS timing
+            tts_start = time.time()
+            if TTS_IN_PARALLEL:
+                timing = await speak_parallel(reply, stop_chime)
+                print(f"   ⏱️ TTS: {timing['first_chunk']:.1f}s first, {timing['total']:.1f}s total")
+            else:
+                await speak_custom(reply, stop_chime)
+                tts_end = time.time()
+                print(f"   ⏱️ TTS: {tts_end - tts_start:.1f}s")
         else:
             stop_chime.set()
 

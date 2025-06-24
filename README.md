@@ -26,7 +26,7 @@ Talk naturally with your assistant via microphone input and high-quality text-to
 ## 🛠️ Future Improvements & Ideas
 
 - 🧹 **Chores:**
-  - /
+  - *Consider* streaming the llm response, while making sure audio generation chunking is preserved.
 - 🔜 **Near-shore:**
   - 🕷️ Introduce separate vector stores, web-scraper (like [craw4ai](https://github.com/unclecode/crawl4ai)), and management util to list and delete stores easily.
     - Alternatively, use a [Chroma MCP](https://hub.docker.com/r/mcp/chroma) to manage multiple vector stores.
@@ -137,6 +137,7 @@ Then edit `.env` to include your `OPENAI_API_KEY` and any other required secrets
 | `OPENAI_STT_MODEL`       | Speech-to-text model                                               | `gpt-4o-mini-transcribe`              |
 | `OPENAI_TTS_MODEL`       | Text-to-speech model                                               | `gpt-4o-mini-tts`                     |
 | `OPENAI_TTS_VOICE`       | Voice style for TTS                                                | `alloy`                               |
+| `TTS_IN_PARALLEL`        | Generate TTS in parallel chunks for speed.                         | `true`                                |
 | `TRAILING_SILENCE_SEC`   | Seconds of trailing silence to detect end of speech                | `1.5`                                 |
 | `VAD_FRAME_MS`           | ms per VAD frame (10, 20, or 30)                                   | `30`                                  |
 | `VAD_AGGRESSIVENESS`     | WebRTC VAD aggressiveness (0–3)                                    | `2`                                   |
@@ -150,7 +151,7 @@ Then edit `.env` to include your `OPENAI_API_KEY` and any other required secrets
 | `AGENT_FOLDER_NAME`      | Relative sandbox folder inside vault                               | `Butler`                              |
 | `ASSISTANT_NAME`         | Name of the assistant, used in prompts.                            | `Sebatian`                            |
 | `USER_NAME`              | Name of the user (you), used in prompts.                           | `User`                                |
-| `SUMMARY_FOLDER` | Sub-folder for session summaries filenames                               | `sessions`                    |
+| `SUMMARY_FOLDER`         | Sub-folder for session summaries filenames                         | `sessions`                            |
 | `TOOL_CALL_FILE_NAME`    | Filename for combined tool-call log under logs subfolder           | `tool-calls.md`                       |
 | `CHROMA_DB_PATH`         | Folder name for the persistent vector database.                    | `cached/obsidian_chroma_db`           |
 | `EMBEDDING_MODEL_NAME`   | The model used to create embeddings.                               | `thenlper/gte-large`                  |
